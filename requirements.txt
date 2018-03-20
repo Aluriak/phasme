@@ -1,0 +1,2 @@
+clyngor==0.3.1
+networkx==2.1

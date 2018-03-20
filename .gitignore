@@ -1,0 +1,7 @@
+*.pyc
+*.vim
+.cache/
+.pytest_cache/
+.zcache/
+__pycache__/
+venv/
