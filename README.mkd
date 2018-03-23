@@ -5,7 +5,7 @@ Graph with ASP made easy.
 ## CLI example
 
     python -m grasp split data.lp -o "data_{}.lp" # split a graph by cc
-    python -m grasp infos data.lp --motifs
+    python -m grasp infos data.lp
 
 
 ## CLI commands
