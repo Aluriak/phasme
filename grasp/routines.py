@@ -49,6 +49,8 @@ def clean(fname:str, target:str=None,
 
 
 def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
+         graphics:bool=False, outdir:str='.',
+         heavy_computations:bool=False,
          edge_predicate:str=edge_predicate) -> dict:
     """Yield (field, value) infos of targets written
 
@@ -56,6 +58,7 @@ def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
     info_ccs -- print info about connected components in the graph
 
     """
+    outdir = commons.normalize_filename(outdir)
     graph = graph_from_file(fname, edge_predicate=edge_predicate)
     nb_node, nb_edge = len(graph.nodes), len(graph.edges)
     def density(nb_node, nb_edge):
@@ -83,3 +86,13 @@ def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
             yield '#node/cc (mean)', sum(node_per_cc) / len(node_per_cc)
             yield 'density/cc', tuple(density(len(nodes), len(tuple(cc.edges))) for cc, nodes in zip(ccs, ccs_nodes))
 
+
+    if graphics:
+        # TODO: degree distribution (lin-lin, log-lin, lin-log, log-log)
+        # TODO: motif size distribution (if info_motifs > 1)
+        ...
+
+    if heavy_computations:
+        # TODO: bipartite detection
+        # TODO: concept and AOC poset size, ratio.
+        ...

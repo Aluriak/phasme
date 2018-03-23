@@ -40,14 +40,21 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     give_common_args(parser_clean)
 
     # infos on graph
-    parser_infos.add_argument('--no-cc', action='store_false',
+    parser_infos.add_argument('--no-cc', '-n', action='store_false',
                               help="Do not search for connected components info.")
-    parser_infos.add_argument('--motifs', action='store_true',
+    parser_infos.add_argument('--motifs', '-m', action='store_true',
                               help="Search for biggest motifs stats.")
+    parser_infos.add_argument('--heavy-computations', '-h', action='store_true',
+                              help="Perform costly detection of graph features.")
+    parser_infos.add_argument('--graphics', '-g', action='store_true',
+                              help="Produce and save various graphics and visualizations.")
+    parser_infos.add_argument('--outdir', '-o', type=str, default='.',
+                              help="Where to put produced files, if any.")
 
     # split by cc
     parser_split.add_argument('targets', type=str, default=None,
                               help='file template to write the components in.')
+
     # clean file
     parser_clean.add_argument('--target', '-t', '-o', type=str, default=None,
                               help='file to write the graph in.')
