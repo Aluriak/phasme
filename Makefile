@@ -7,7 +7,7 @@ c:
 
 t: test
 test:
-	python -m pytest test --doctest-module
+	python -m pytest grasp test --doctest-module
 
 
 .PHONY: t test all
