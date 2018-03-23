@@ -4,9 +4,10 @@
 
 import os
 import networkx
+import commons
 from asp import asp_from_graph
 from commons import edge_predicate
-from build_graph import graph_from_file
+from build_graph import graph_from_file, graph_to_file
 
 
 def split_by_cc(fname:str, targets:str=None, edge_predicate:str=edge_predicate) -> tuple:
@@ -28,6 +29,23 @@ def split_by_cc(fname:str, targets:str=None, edge_predicate:str=edge_predicate) 
                 fd.write(line+'\n')
         writtens.append(target)
     return tuple(writtens)
+
+
+def clean(fname:str, target:str=None,
+          edge_predicate:str=edge_predicate,
+          target_edge_predicate:str=edge_predicate) -> dict:
+    """Write in target the very same graph as input, but in
+    an clean ASP expanded format.
+
+    target -- file to write. If None or equal to fname, overwrite.
+    target_edge_predicate -- edge predicate to use in rewritten file.
+
+    """
+    fname = commons.normalize_filename(fname)
+    if target: target = commons.normalize_filename(target)
+    if not target:  target = fname
+    graph = graph_from_file(fname, edge_predicate=edge_predicate)
+    graph_to_file(graph, target, edge_predicate=target_edge_predicate)
 
 
 def info(fname:str, info_motifs:int=0, info_ccs:bool=True,

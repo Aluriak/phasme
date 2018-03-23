@@ -49,6 +49,10 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     parser_split.add_argument('targets', type=str, default=None,
                               help='file template to write the components in.')
     # clean file
+    parser_clean.add_argument('--target', '-t', '-o', type=str, default=None,
+                              help='file to write the graph in.')
+    parser_clean.add_argument('--target-edge-predicate', type=str, default='edge',
+                              help='ASP predicate encoding the graph edges in target.')
 
     return parser
 
@@ -57,4 +61,4 @@ def give_common_args(parser):
     parser.add_argument('infile', type=existant_file,
                         help='file containing the graph data.')
     parser.add_argument('--edge-predicate', type=str, default='edge',
-                        help='ASP predicate encoding the graph edges.')
+                        help='ASP predicate encoding the graph edges in fname.')

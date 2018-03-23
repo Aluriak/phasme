@@ -18,6 +18,8 @@ if __name__ == "__main__":
         print(routines.split_by_cc(args.infile, args.targets,
                                    edge_predicate=args.edge_predicate))
     elif args.command == 'clean':
-        print(routines.clean(args.infile, args.target))
+        routines.clean(args.infile, args.target,
+                       edge_predicate=args.edge_predicate,
+                       target_edge_predicate=args.target_edge_predicate)
     else:
         print('WOOT', args)
