@@ -76,9 +76,10 @@ def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
         ccs_nodes = tuple(networkx.connected_components(graph))
         ccs = tuple(graph.subgraph(cc) for cc in ccs_nodes)
         yield '#cc', len(ccs_nodes)
-        node_per_cc = tuple(map(len, ccs_nodes))
-        yield '#node/cc', node_per_cc
-        yield '#node/cc (prop)', tuple(nb / nb_node for nb in node_per_cc)
-        yield '#node/cc (mean)', sum(node_per_cc) / len(node_per_cc)
-        yield 'density/cc', tuple(density(len(nodes), len(tuple(cc.edges))) for cc, nodes in zip(ccs, ccs_nodes))
+        if len(ccs_nodes) > 1:
+            node_per_cc = tuple(map(len, ccs_nodes))
+            yield '#node/cc', node_per_cc
+            yield '#node/cc (prop)', tuple(nb / nb_node for nb in node_per_cc)
+            yield '#node/cc (mean)', sum(node_per_cc) / len(node_per_cc)
+            yield 'density/cc', tuple(density(len(nodes), len(tuple(cc.edges))) for cc, nodes in zip(ccs, ccs_nodes))
 
