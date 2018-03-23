@@ -1,6 +1,6 @@
 
 
-from commons import edge_predicate
+from grasp.commons import edge_predicate
 
 def as_asp_value(smth:object) -> str:
     """Return given value as an ASP-compliant string

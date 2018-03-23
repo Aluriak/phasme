@@ -4,10 +4,10 @@
 
 import os
 import networkx
-import commons
-from asp import asp_from_graph
-from commons import edge_predicate
-from build_graph import graph_from_file, graph_to_file
+from grasp import commons
+from grasp.asp import asp_from_graph
+from grasp.commons import edge_predicate
+from grasp.build_graph import graph_from_file, graph_to_file
 
 
 def split_by_cc(fname:str, targets:str=None, edge_predicate:str=edge_predicate) -> tuple:

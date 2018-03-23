@@ -1,7 +1,7 @@
 
 
 import pytest
-from extract_links import links_from_clean_lines, links_from_lines
+from grasp.extract_links import links_from_clean_lines, links_from_lines
 
 
 @pytest.fixture

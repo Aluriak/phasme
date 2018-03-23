@@ -2,7 +2,7 @@
 import re
 import argparse
 import clyngor
-from commons import edge_predicate
+from grasp.commons import edge_predicate
 
 
 def links_from_file(fname:str, edge_predicate:str=edge_predicate):

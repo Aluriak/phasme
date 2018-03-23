@@ -1,10 +1,10 @@
 
 import networkx
-import commons
-from asp import asp_from_graph
-from commons import edge_predicate
-from extract_links import links_from_file, links_from_dirty_file
-from extract_links import links_from_lines, links_from_dirty_lines
+from grasp import commons
+from grasp.asp import asp_from_graph
+from grasp.commons import edge_predicate
+from grasp.extract_links import links_from_file, links_from_dirty_file
+from grasp.extract_links import links_from_lines, links_from_dirty_lines
 
 
 def graph_from_standard_file(fname:str, edge_predicate:str=edge_predicate):

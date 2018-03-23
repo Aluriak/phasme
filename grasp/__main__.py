@@ -1,8 +1,8 @@
 
 
-import cli
-import routines
 from operator import itemgetter
+from grasp import cli
+from grasp import routines
 
 
 if __name__ == "__main__":

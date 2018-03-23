@@ -3,7 +3,7 @@
 
 t: test
 test:
-	python -m pytest . --doctest-module
+	python -m pytest test --doctest-module
 
 
 .PHONY: t test all
