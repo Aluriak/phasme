@@ -41,7 +41,11 @@ def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
     graph = graph_from_file(fname, edge_predicate=edge_predicate)
     nb_node, nb_edge = len(graph.nodes), len(graph.edges)
     def density(nb_node, nb_edge):
-        return 2 * nb_edge / (nb_node * (nb_node - 1))
+        try:
+            return 2 * nb_edge / (nb_node * (nb_node - 1))
+        except ZeroDivisionError:
+            import math
+            return math.nan
 
     yield '#node', nb_node
     yield '#edge', nb_edge
