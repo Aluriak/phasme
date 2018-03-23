@@ -43,7 +43,7 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     parser_infos.add_argument('--no-cc', action='store_false',
                               help="Do not search for connected components info.")
     parser_infos.add_argument('--motifs', action='store_true',
-                              help="Search for bigger motifs stats.")
+                              help="Search for biggest motifs stats.")
 
     # split by cc
     parser_split.add_argument('targets', type=str, default=None,
