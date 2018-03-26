@@ -3,6 +3,7 @@
 """
 
 import os
+import random
 import networkx
 from grasp import commons
 from grasp.asp import asp_from_graph
@@ -28,6 +29,9 @@ def split_by_cc(fname:str, targets:str=None, order:str=None, slice=None,
         ccs = sorted(tuple(ccs), key=len, reverse=True)
     elif order in {'biggest last', 'smaller first'}:
         ccs = sorted(tuple(ccs), key=len)
+    elif order == 'random':
+        ccs = list(ccs)
+        random.shuffle(ccs)
     if slice:
         try:
             if len(slice) != 2 or any(not isinstance(v, int) for v in slice):
