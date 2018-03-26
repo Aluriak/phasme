@@ -3,7 +3,8 @@
 import pytest
 from .test_read_data import data_bad_complex
 from grasp.build_graph import (graph_from_dirty_lines, graph_from_lines,
-                               graph_from_file, graph_from_standard_file)
+                               graph_from_file, graph_from_standard_file,
+                               graph_from_networkx_method)
 
 
 def comparable_graph(graph) -> frozenset:
@@ -32,3 +33,12 @@ def test_graphml():
     assert one == two
     assert one == frozenset(map(frozenset, ({'1', '2'}, {'1', '3'},
                                             {'2', '4'}, {'3', '4'})))
+
+
+def test_generate_from_networkx():
+    # NB: seed is here to enforce reproductibility
+    graph = graph_from_networkx_method('powerlaw_cluster_graph',
+                                       ['n=5', 'm=2', 'p=0.01', 'seed=42'])
+    graph = comparable_graph(graph)
+    assert len(graph) == 6
+    assert graph == frozenset({frozenset({1, 2}), frozenset({1, 4}), frozenset({3, 4}), frozenset({2, 3}), frozenset({0, 2}), frozenset({1, 3})})
