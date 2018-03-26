@@ -8,6 +8,7 @@ from collections import OrderedDict
 import networkx
 from grasp import commons
 from grasp.asp import asp_from_graph
+from grasp.info import info
 from grasp.commons import edge_predicate
 from grasp.build_graph import graph_from_file, graph_to_file
 
@@ -48,107 +49,3 @@ def clean(fname:str, target:str=None,
     if not target:  target = fname
     graph = graph_from_file(fname, edge_predicate=edge_predicate)
     graph_to_file(graph, target, edge_predicate=target_edge_predicate)
-
-
-def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
-               graphics:bool=False, outdir:str='.',
-               heavy_computations:bool=False, graph_properties:bool=False,
-               negative_results:bool=True,
-               edge_predicate:str=edge_predicate) -> dict:
-    """Yield (field, value) infos of targets written
-
-    info_motifs -- print info about the n first motifs in the graph
-    info_ccs -- print info about connected components in the graph
-
-    """
-    outdir = commons.normalize_filename(outdir)
-    graph = graph_from_file(fname, edge_predicate=edge_predicate)
-    nb_node, nb_edge = len(graph.nodes), len(graph.edges)
-    def density(nb_node, nb_edge):
-        try:
-            return 2 * nb_edge / (nb_node * (nb_node - 1))
-        except ZeroDivisionError:
-            import math
-            return math.nan
-
-    yield '#node', nb_node
-    yield '#edge', nb_edge
-    yield 'density', density(nb_node, nb_edge)
-
-    if info_motifs:
-        for motif in ():
-            clyngor.solve()
-    if info_ccs:
-        ccs_nodes = tuple(networkx.connected_components(graph))
-        ccs = tuple(graph.subgraph(cc) for cc in ccs_nodes)
-        yield '#cc', len(ccs_nodes)
-        if len(ccs_nodes) > 1:
-            node_per_cc = tuple(map(len, ccs_nodes))
-            yield '#node/cc', node_per_cc
-            yield '#node/cc (prop)', tuple(nb / nb_node for nb in node_per_cc)
-            yield '#node/cc (mean)', sum(node_per_cc) / len(node_per_cc)
-            yield 'density/cc', tuple(density(len(nodes), len(tuple(cc.edges))) for cc, nodes in zip(ccs, ccs_nodes))
-
-
-    if graphics:
-        # TODO: degree distribution (lin-lin, log-lin, lin-log, log-log)
-        # TODO: motif size distribution (if info_motifs > 1)
-        ...
-
-    if heavy_computations:
-        # TODO: concept and AOC poset size, ratio.
-        ...
-
-    if graph_properties:
-        non_implemented = []
-        for attrname, attr in vars(networkx).items():
-            if attrname.startswith('is_'):
-                attrname = attrname[3:]
-                if getfullargspec(attr).args == ['G']:  # only 1 arg
-                    try:
-                        yield attrname, attr(graph)  # discard the 'is_'
-                    except networkx.exception.NetworkXNotImplemented as err:
-                        non_implemented.append(attrname)
-                    except networkx.exception.NetworkXError as err:
-                        non_implemented.append(attrname)
-
-        properties = ('transitivity', 'average_clustering', 'average_node_connectivity', 'average_shortest_path_length')
-        for attrname in properties:
-            try:
-                yield attrname, getattr(networkx, attrname)(graph)
-            except networkx.exception.NetworkXError as err:
-                non_implemented.append(attrname)
-        if non_implemented and negative_results:
-            yield 'non implemented', non_implemented
-
-
-def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
-         graphics:bool=False, outdir:str='.',
-         heavy_computations:bool=False, graph_properties:bool=False,
-         round_float:int=None,
-         negative_results:bool=True, edge_predicate:str=edge_predicate) -> dict:
-    """Yield lines of text to show"""
-    infos = OrderedDict(yield_info(fname, info_motifs, info_ccs, graphics, outdir, heavy_computations, graph_properties, negative_results, edge_predicate))
-    properties = {True: set(), False: set()}
-    maxkeylen = max(map(len, infos))
-    iter_handler = lambda v: ', '.join(sorted(map(str, v)))
-    type_handler = {
-        str: str,
-        tuple: iter_handler,
-        list: iter_handler,
-        set: iter_handler,
-        int: str,
-        float: (str if round_float is None else lambda v, r=round_float: str(round(v, r))),
-    }
-    def show(field, value, maxkeylen=maxkeylen):
-        return field.rjust(maxkeylen+1) + ' | ' + type_handler[type(value)](value)
-
-    for field, value in infos.items():
-        if isinstance(value, bool):
-            properties[value].add(field)
-        else:
-            yield show(field, value)
-    if negative_results and properties[False]:
-        yield show('¬properties', properties[False])
-    if properties[True]:
-        yield show('properties', properties[True])
