@@ -69,6 +69,8 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
                               help='file to write the graph in.')
     parser_clean.add_argument('--target-edge-predicate', type=str, default='edge',
                               help='ASP predicate encoding the graph edges in target.')
+    parser_clean.add_argument('--anonymize', action='store_true',
+                              help='Rename nodes into integers.')
 
     # generate graph
     parser_genrt.add_argument('method', type=str, help='Generation method.')

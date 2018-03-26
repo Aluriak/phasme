@@ -23,6 +23,7 @@ if __name__ == "__main__":
                                    edge_predicate=args.edge_predicate))
     elif args.command == 'clean':
         routines.clean(args.infile, args.target,
+                       anonymize=args.anonymize,
                        edge_predicate=args.edge_predicate,
                        target_edge_predicate=args.target_edge_predicate)
     elif args.command == 'generate':

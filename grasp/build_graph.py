@@ -1,5 +1,7 @@
 
 import networkx
+import itertools
+from collections import defaultdict
 from grasp import commons
 from grasp.asp import asp_from_graph
 from grasp.commons import edge_predicate
@@ -65,3 +67,15 @@ def graph_from_networkx_method(method:str, method_parameters=[]):
         for field, value in map(lambda arg: arg.split('='), method_parameters)
     }
     return getattr(networkx, method)(**method_parameters)
+
+
+def anonymized(graph):
+    """Return a new graph, equivalent to given one but with node names changed
+    to integers.
+    """
+    random_names = itertools.count(1)
+    name = defaultdict(lambda: next(random_names))
+    anon = type(graph)()
+    for source, target in graph.edges:
+        anon.add_edge(name[source], name[target])
+    return anon
