@@ -63,6 +63,10 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     # split by cc
     parser_split.add_argument('targets', type=str, default=None,
                               help='file template to write the components in.')
+    parser_split.add_argument('--biggest-first', action='store_true',
+                              help='Sort cc by decreasing size.')
+    parser_split.add_argument('--biggest-last', action='store_true',
+                              help='Sort cc by increasing size.')
 
     # convert, clean or anonymize file
     parser_convr.add_argument('target', type=str, default=None,

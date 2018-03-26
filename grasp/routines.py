@@ -11,7 +11,8 @@ from grasp.commons import edge_predicate
 from grasp.build_graph import graph_from_file, graph_to_file, graph_from_networkx_method, anonymized
 
 
-def split_by_cc(fname:str, targets:str=None, edge_predicate:str=edge_predicate) -> tuple:
+def split_by_cc(fname:str, targets:str=None, order:str=None,
+                edge_predicate:str=edge_predicate) -> tuple:
     """Return names of targets written"""
     if not targets:
         name, ext = os.path.splitext(fname)
@@ -22,12 +23,15 @@ def split_by_cc(fname:str, targets:str=None, edge_predicate:str=edge_predicate) 
         raise ValueError("Target should be a filename to write containing '{}'")
     graph = graph_from_file(fname, edge_predicate=edge_predicate)
     writtens = []
-    for idx, cc_nodes in enumerate(networkx.connected_components(graph)):
+    ccs = networkx.connected_components(graph)
+    if order in {'biggest first', 'smaller last'}:
+        ccs = sorted(tuple(ccs), key=len, reverse=True)
+    elif order in {'biggest last', 'smaller first'}:
+        ccs = sorted(tuple(ccs), key=len)
+    for idx, cc_nodes in enumerate(ccs):
         cc = graph.subgraph(cc_nodes)
         target = targets.format(idx)
-        with open(target, 'w') as fd:
-            for line in asp_from_graph(cc, edge_predicate=edge_predicate):
-                fd.write(line+'\n')
+        graph_to_file(cc, target)
         writtens.append(target)
     return tuple(writtens)
 

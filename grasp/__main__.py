@@ -19,7 +19,13 @@ if __name__ == "__main__":
                               edge_predicate=args.edge_predicate)
         print('\n'.join(infos))
     elif args.command == 'split':
-        print(routines.split_by_cc(args.infile, args.targets,
+        if args.biggest_first:
+            order = 'biggest first'
+        elif args.biggest_last:
+            order = 'biggest last'
+        else:
+            order = None
+        print(routines.split_by_cc(args.infile, args.targets, order=order,
                                    edge_predicate=args.edge_predicate))
     elif args.command == 'convert':
         routines.convert(args.infile, args.target,
