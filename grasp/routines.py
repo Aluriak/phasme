@@ -28,7 +28,7 @@ def split_by_cc(fname:str, targets:str=None, order:str=None,
         ccs = sorted(tuple(ccs), key=len, reverse=True)
     elif order in {'biggest last', 'smaller first'}:
         ccs = sorted(tuple(ccs), key=len)
-    for idx, cc_nodes in enumerate(ccs):
+    for idx, cc_nodes in enumerate(ccs, start=1):
         cc = graph.subgraph(cc_nodes)
         target = targets.format(idx)
         graph_to_file(cc, target)
