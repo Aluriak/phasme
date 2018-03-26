@@ -32,9 +32,9 @@ def split_by_cc(fname:str, targets:str=None, edge_predicate:str=edge_predicate) 
     return tuple(writtens)
 
 
-def clean(fname:str, target:str=None, anonymize:bool=False,
-          edge_predicate:str=edge_predicate,
-          target_edge_predicate:str=edge_predicate) -> dict:
+def convert(fname:str, target:str=None, anonymize:bool=False,
+            edge_predicate:str=edge_predicate,
+            target_edge_predicate:str=edge_predicate) -> dict:
     """Write in target the very same graph as input, but in
     an clean ASP expanded format.
 

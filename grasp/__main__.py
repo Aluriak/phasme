@@ -21,11 +21,11 @@ if __name__ == "__main__":
     elif args.command == 'split':
         print(routines.split_by_cc(args.infile, args.targets,
                                    edge_predicate=args.edge_predicate))
-    elif args.command == 'clean':
-        routines.clean(args.infile, args.target,
-                       anonymize=args.anonymize,
-                       edge_predicate=args.edge_predicate,
-                       target_edge_predicate=args.target_edge_predicate)
+    elif args.command == 'convert':
+        routines.convert(args.infile, args.target,
+                         anonymize=args.anonymize,
+                         edge_predicate=args.edge_predicate,
+                         target_edge_predicate=args.target_edge_predicate)
     elif args.command == 'generate':
         routines.generate(target=args.outfile, method=args.method,
                           method_parameters=args.args,

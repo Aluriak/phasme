@@ -33,12 +33,12 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     # subparsers
     parser_infos = subs.add_parser('infos', description='Print general info about the graph.')
     parser_split = subs.add_parser('split', description='Split graph by cc.')
-    parser_clean = subs.add_parser('clean', description='Rewrite file in clean format.')
-    parser_genrt = subs.add_parser('generate', description='Generate a clean ASP graph file.')
+    parser_convr = subs.add_parser('convert', description='Convert, rewrite or anonymize graph to standard format or clean ASP.')
+    parser_genrt = subs.add_parser('generate', description='Generate an ASP graph file.')
 
     give_common_args(parser_infos)
     give_common_args(parser_split)
-    give_common_args(parser_clean)
+    give_common_args(parser_convr)
     give_common_args(parser_genrt, infile_is_outfile=True)
 
 
@@ -64,12 +64,12 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     parser_split.add_argument('targets', type=str, default=None,
                               help='file template to write the components in.')
 
-    # clean file
-    parser_clean.add_argument('target', type=str, default=None,
+    # convert, clean or anonymize file
+    parser_convr.add_argument('target', type=str, default=None,
                               help='file to write the graph in.')
-    parser_clean.add_argument('--target-edge-predicate', type=str, default='edge',
+    parser_convr.add_argument('--target-edge-predicate', type=str, default='edge',
                               help='ASP predicate encoding the graph edges in target.')
-    parser_clean.add_argument('--anonymize', action='store_true',
+    parser_convr.add_argument('--anonymize', action='store_true',
                               help='Rename nodes into integers.')
 
     # generate graph
