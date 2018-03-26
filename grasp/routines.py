@@ -3,14 +3,12 @@
 """
 
 import os
-from inspect import getfullargspec
-from collections import OrderedDict
 import networkx
 from grasp import commons
 from grasp.asp import asp_from_graph
 from grasp.info import info
 from grasp.commons import edge_predicate
-from grasp.build_graph import graph_from_file, graph_to_file
+from grasp.build_graph import graph_from_file, graph_to_file, graph_from_networkx_method
 
 
 def split_by_cc(fname:str, targets:str=None, edge_predicate:str=edge_predicate) -> tuple:
@@ -49,3 +47,12 @@ def clean(fname:str, target:str=None,
     if not target:  target = fname
     graph = graph_from_file(fname, edge_predicate=edge_predicate)
     graph_to_file(graph, target, edge_predicate=target_edge_predicate)
+
+
+def generate(target:str, method:str, method_parameters=[],
+             edge_predicate:str=edge_predicate):
+    """Write in file of given name a graph generated with given method.
+
+    """
+    graph = graph_from_networkx_method(method, method_parameters)
+    return graph_to_file(graph, target, edge_predicate=edge_predicate)
