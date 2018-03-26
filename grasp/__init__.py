@@ -1,1 +1,1 @@
-from grasp.routines import info, clean, split_by_cc, generate
+from grasp.routines import info, convert, split_by_cc, generate
