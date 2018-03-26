@@ -26,7 +26,8 @@ if __name__ == "__main__":
                        edge_predicate=args.edge_predicate,
                        target_edge_predicate=args.target_edge_predicate)
     elif args.command == 'generate':
-        routines.generate(target=args.infile, method=args.method,
+        routines.generate(target=args.outfile, method=args.method,
+                          method_parameters=args.args,
                           edge_predicate=args.edge_predicate)
     else:
         print('WOOT', args)

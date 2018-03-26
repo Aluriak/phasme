@@ -39,7 +39,7 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     give_common_args(parser_infos)
     give_common_args(parser_split)
     give_common_args(parser_clean)
-    give_common_args(parser_genrt)
+    give_common_args(parser_genrt, infile_is_outfile=True)
 
 
     # infos on graph
@@ -71,13 +71,19 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
                               help='ASP predicate encoding the graph edges in target.')
 
     # generate graph
-    parser_genrt.add_argument('method', type=str, help='Gneration method.')
+    parser_genrt.add_argument('method', type=str, help='Generation method.')
+    parser_genrt.add_argument('args', type=str, nargs='+', metavar='F=V',
+                              default=None, help='Args to give to the generation method.')
 
     return parser
 
 
-def give_common_args(parser):
-    parser.add_argument('infile', type=existant_file,
-                        help='file containing the graph data.')
+def give_common_args(parser, *, infile_is_outfile:bool=False):
+    if infile_is_outfile:
+        parser.add_argument('outfile', type=writable_file,
+                            help='file to write the graph data in.')
+    else:
+        parser.add_argument('infile', type=existant_file,
+                            help='file containing the graph data.')
     parser.add_argument('--edge-predicate', type=str, default='edge',
                         help='ASP predicate encoding the graph edges in fname.')
