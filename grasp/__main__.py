@@ -13,7 +13,7 @@ if __name__ == "__main__":
         infos = routines.info(args.infile, args.motifs, args.no_cc,
                               graphics=args.graphics, outdir=args.outdir,
                               heavy_computations=args.heavy_computations,
-                              graph_properties=graph_properties,
+                              graph_properties=args.graph_properties,
                               edge_predicate=args.edge_predicate)
         for field, value in infos:
             value = ', '.join(map(str, value)) if isinstance(value, (tuple, list, set)) else str(value)
