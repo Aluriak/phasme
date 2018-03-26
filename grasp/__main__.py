@@ -1,12 +1,11 @@
-
+#!/usr/bin/env python
 
 from operator import itemgetter
 from grasp import cli
 from grasp import routines
 
 
-if __name__ == "__main__":
-
+def run_cli():
     args = cli.parse_args(__doc__)
 
     if args.command == 'infos':
@@ -39,3 +38,7 @@ if __name__ == "__main__":
                           edge_predicate=args.edge_predicate)
     else:
         print('WOOT', args)
+
+
+if __name__ == "__main__":
+    run_cli()
