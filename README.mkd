@@ -10,10 +10,9 @@ Graph with ASP made easy.
 
 ## CLI commands
 
-- `split`: split by connected component
-- `info`: give info about given graph
-- `clean`: rewrite the graph in a clean ASP version
-- `convert`: convert graph to given standard format
+- `split`: split by connected component.
+- `info`: give info about given graph.
+- `convert`: rewrite, anonymize or convert the graph to (clean) ASP or standard format.
+- `generate`: generate a graph using a given generation method.
 <!-- - `compress`: produce the powergraph compression of given graph as a bubble file -->
 <!-- - ``:  -->
-- `generate`: generate a graph using a given generation method
