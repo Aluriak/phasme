@@ -4,4 +4,8 @@
 .pytest_cache/
 .zcache/
 __pycache__/
+dist/
+graph_asp.egg-info/
+grasp.egg-info/
+todel*
 venv/
