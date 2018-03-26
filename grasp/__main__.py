@@ -25,5 +25,8 @@ if __name__ == "__main__":
         routines.clean(args.infile, args.target,
                        edge_predicate=args.edge_predicate,
                        target_edge_predicate=args.target_edge_predicate)
+    elif args.command == 'generate':
+        routines.generate(target=args.infile, method=args.method,
+                          edge_predicate=args.edge_predicate)
     else:
         print('WOOT', args)

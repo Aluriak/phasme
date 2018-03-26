@@ -16,3 +16,4 @@ Graph with ASP made easy.
 - `convert`: convert graph to given standard format
 <!-- - `compress`: produce the powergraph compression of given graph as a bubble file -->
 <!-- - ``:  -->
+- `generate`: generate a graph using a given generation method

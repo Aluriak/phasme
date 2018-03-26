@@ -34,13 +34,16 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     parser_infos = subs.add_parser('infos', description='Print general info about the graph.')
     parser_split = subs.add_parser('split', description='Split graph by cc.')
     parser_clean = subs.add_parser('clean', description='Rewrite file in clean format.')
+    parser_genrt = subs.add_parser('generate', description='Generate a clean ASP graph file.')
 
     give_common_args(parser_infos)
     give_common_args(parser_split)
     give_common_args(parser_clean)
+    give_common_args(parser_genrt)
+
 
     # infos on graph
-    parser_infos.add_argument('--no-cc', '-n', action='store_false',
+    parser_infos.add_argument('--no-cc', '-nc', action='store_false',
                               help="Do not search for connected components info.")
     parser_infos.add_argument('--motifs', '-m', action='store_true',
                               help="Search for biggest motifs stats.")
@@ -66,6 +69,9 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
                               help='file to write the graph in.')
     parser_clean.add_argument('--target-edge-predicate', type=str, default='edge',
                               help='ASP predicate encoding the graph edges in target.')
+
+    # generate graph
+    parser_genrt.add_argument('method', type=str, help='Gneration method.')
 
     return parser
 
