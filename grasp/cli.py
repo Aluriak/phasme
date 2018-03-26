@@ -44,8 +44,10 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
                               help="Do not search for connected components info.")
     parser_infos.add_argument('--motifs', '-m', action='store_true',
                               help="Search for biggest motifs stats.")
-    parser_infos.add_argument('--heavy-computations', '-h', action='store_true',
+    parser_infos.add_argument('--heavy-computations', '-c', action='store_true',
                               help="Perform costly detection of graph features.")
+    parser_infos.add_argument('--graph-properties', '-c', action='store_true',
+                              help="Use networkx to compute graph properties.")
     parser_infos.add_argument('--graphics', '-g', action='store_true',
                               help="Produce and save various graphics and visualizations.")
     parser_infos.add_argument('--outdir', '-o', type=str, default='.',

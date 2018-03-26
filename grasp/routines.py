@@ -3,6 +3,7 @@
 """
 
 import os
+from inspect import getfullargspec
 import networkx
 from grasp import commons
 from grasp.asp import asp_from_graph
@@ -50,7 +51,7 @@ def clean(fname:str, target:str=None,
 
 def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
          graphics:bool=False, outdir:str='.',
-         heavy_computations:bool=False,
+         heavy_computations:bool=False, graph_properties:bool=False,
          edge_predicate:str=edge_predicate) -> dict:
     """Yield (field, value) infos of targets written
 
@@ -96,3 +97,14 @@ def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
         # TODO: bipartite detection
         # TODO: concept and AOC poset size, ratio.
         ...
+
+    if graph_properties:
+        for attrname, attr in vars(networkx).items():
+            if attrname.startswith('is_'):
+                if getfullargspec(attr).args == ['G']:  # only 1 arg
+                    try:
+                        yield attrname[3:], attr(graph)  # discard the 'is_'
+                    except networkx.exception.NetworkXNotImplemented as err:
+                        yield attrname[3:], err.args[0]
+                    except networkx.exception.NetworkXError as err:
+                        yield attrname[3:], err.args[0]
