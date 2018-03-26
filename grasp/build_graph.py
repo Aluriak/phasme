@@ -51,3 +51,17 @@ def graph_to_file(graph, fname:str, edge_predicate:str=edge_predicate, eol:str='
     with open(fname, 'w') as fd:
         for line in asp_from_graph(graph, edge_predicate=edge_predicate):
             fd.write(line + eol)
+
+
+def graph_from_networkx_method(method:str, method_parameters=[]):
+    """Return a graph generated with given method and method parameters.
+
+    method -- networkx attribute name implementing a graph generation method
+    method_parameters -- iterable of string like '{field}={value}'
+
+    """
+    method_parameters = {
+        field: float(value) if '.' in value else int(value)
+        for field, value in map(lambda arg: arg.split('='), method_parameters)
+    }
+    return getattr(networkx, method)(**method_parameters)
