@@ -67,6 +67,8 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
                               help='Sort cc by decreasing size.')
     parser_split.add_argument('--biggest-last', action='store_true',
                               help='Sort cc by increasing size.')
+    parser_split.add_argument('--slice', type=int, nargs=2, metavar=('FIRST', 'LAST'),
+                              default=None, help='Slice to select connected components to extract.')
 
     # convert, clean or anonymize file
     parser_convr.add_argument('target', type=str, default=None,

@@ -26,6 +26,7 @@ if __name__ == "__main__":
         else:
             order = None
         print(routines.split_by_cc(args.infile, args.targets, order=order,
+                                   slice=args.slice,
                                    edge_predicate=args.edge_predicate))
     elif args.command == 'convert':
         routines.convert(args.infile, args.target,
