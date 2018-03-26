@@ -65,7 +65,7 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
                               help='file template to write the components in.')
 
     # clean file
-    parser_clean.add_argument('--target', '-t', '-o', type=str, default=None,
+    parser_clean.add_argument('target', type=str, default=None,
                               help='file to write the graph in.')
     parser_clean.add_argument('--target-edge-predicate', type=str, default='edge',
                               help='ASP predicate encoding the graph edges in target.')

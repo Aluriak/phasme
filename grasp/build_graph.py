@@ -50,9 +50,17 @@ def graph_from_dirty_lines(lines:iter, edge_predicate:str=edge_predicate):
 
 def graph_to_file(graph, fname:str, edge_predicate:str=edge_predicate, eol:str='\n'):
     """Write given graph into file, in clean ASP format."""
+    format = commons.format_of_file(fname)
+    if format not in {'lp', ''}:
+        return graph_to_standard_file(graph, fname, format)
     with open(fname, 'w') as fd:
         for line in asp_from_graph(graph, edge_predicate=edge_predicate):
             fd.write(line + eol)
+    return fname
+
+def graph_to_standard_file(graph, fname:str, format:str):
+    """Write given graph into file, in given standard format."""
+    return getattr(networkx, 'write_' + format)(graph, fname)
 
 
 def graph_from_networkx_method(method:str, method_parameters=[]):
