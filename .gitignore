@@ -5,7 +5,6 @@
 .zcache/
 __pycache__/
 dist/
-graph_asp.egg-info/
-grasp.egg-info/
+phasme.egg-info/
 todel*
 venv/

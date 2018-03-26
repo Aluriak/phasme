@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 from operator import itemgetter
-from grasp import cli
-from grasp import routines
+from phasme import cli
+from phasme import routines
 
 
 def run_cli():

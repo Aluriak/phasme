@@ -5,11 +5,11 @@
 import os
 import random
 import networkx
-from grasp import commons
-from grasp.asp import asp_from_graph
-from grasp.info import info
-from grasp.commons import edge_predicate
-from grasp.build_graph import graph_from_file, graph_to_file, graph_from_networkx_method, anonymized
+from phasme import commons
+from phasme.asp import asp_from_graph
+from phasme.info import info
+from phasme.commons import edge_predicate
+from phasme.build_graph import graph_from_file, graph_to_file, graph_from_networkx_method, anonymized
 
 
 def split_by_cc(fname:str, targets:str=None, order:str=None, slice=None,

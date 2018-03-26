@@ -1,4 +1,4 @@
-from grasp.routines import info
+from phasme.routines import info
 
 
 def test_infos():

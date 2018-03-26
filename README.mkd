@@ -1,4 +1,4 @@
-# Grasp
+# Phasme
 Graph with ASP made easy.
 
 
@@ -7,30 +7,30 @@ Graph with ASP made easy.
 
 ### Write an ASP graph into gexf
 
-    grasp convert data.lp target.gexf
+    phasme convert data.lp target.gexf
 
 ### Extract the biggest cc, write it anonymized in gml
 
-    grasp split data.lp --biggest-first "data_cc.lp" --slice 0 1
-    grasp convert data_cc_1.lp target.gml --anonymized
+    phasme split data.lp --biggest-first "data_cc.lp" --slice 0 1
+    phasme convert data_cc_1.lp target.gml --anonymized
 
 ### Generate a small world graph in gml
 
-    grasp generate data.gml erdos_renyi_graph n=100 p=0.01
+    phasme generate data.gml erdos_renyi_graph n=100 p=0.01
 
 
 ## Packaging
 
     pip install graph-asp
 
-Will also populate your env with the executable `grasp`,
+Will also populate your env with the executable `phasme`,
 enabling access to the CLI.
 
-Note that the package *grasp* exists, but is unrelated to this work.
+Note that the package *phasme* exists, but is unrelated to this work.
 
 
 ## CLI commands
-CLI provides access to higher level [routines](grasp/routines.py).
+CLI provides access to higher level [routines](phasme/routines.py).
 
 - `split`: split by connected component.
 - `info`: give info about given graph.
@@ -42,16 +42,16 @@ CLI provides access to higher level [routines](grasp/routines.py).
 ### Other examples
 
     # split a graph by cc
-    python -m grasp split data.lp -o "data_{}.lp"
+    python -m phasme split data.lp -o "data_{}.lp"
 
     # get infos
-    python -m grasp infos data.lp --graph-properties
+    python -m phasme infos data.lp --graph-properties
 
     # there is a shitload of options
-    python -m grasp infos --help
+    python -m phasme infos --help
 
     # conversions between formats
-    python -m grasp convert data.lp data.gml --anonymize
+    python -m phasme convert data.lp data.gml --anonymize
 
     # generation of new graphs to play with
-    python -m grasp generate graph.gml powerlaw_cluster_graph n=5 m=2 p=0.01
+    python -m phasme generate graph.gml powerlaw_cluster_graph n=5 m=2 p=0.01

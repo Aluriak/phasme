@@ -5,9 +5,9 @@
 import networkx
 from inspect import getfullargspec
 from collections import OrderedDict
-from grasp import commons
-from grasp.commons import edge_predicate
-from grasp.build_graph import graph_from_file
+from phasme import commons
+from phasme.commons import edge_predicate
+from phasme.build_graph import graph_from_file
 
 
 def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,

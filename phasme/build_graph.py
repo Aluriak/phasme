@@ -2,11 +2,11 @@
 import networkx
 import itertools
 from collections import defaultdict
-from grasp import commons
-from grasp.asp import asp_from_graph
-from grasp.commons import edge_predicate
-from grasp.extract_links import links_from_file, links_from_dirty_file
-from grasp.extract_links import links_from_lines, links_from_dirty_lines
+from phasme import commons
+from phasme.asp import asp_from_graph
+from phasme.commons import edge_predicate
+from phasme.extract_links import links_from_file, links_from_dirty_file
+from phasme.extract_links import links_from_lines, links_from_dirty_lines
 
 
 def graph_from_standard_file(fname:str, edge_predicate:str=edge_predicate):

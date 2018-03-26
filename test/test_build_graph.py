@@ -2,9 +2,9 @@
 
 import pytest
 from .test_read_data import data_bad_complex
-from grasp.build_graph import (graph_from_dirty_lines, graph_from_lines,
-                               graph_from_file, graph_from_standard_file,
-                               graph_from_networkx_method)
+from phasme.build_graph import (graph_from_dirty_lines, graph_from_lines,
+                                graph_from_file, graph_from_standard_file,
+                                graph_from_networkx_method)
 
 
 def comparable_graph(graph) -> frozenset:
