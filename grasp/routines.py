@@ -4,6 +4,7 @@
 
 import os
 from inspect import getfullargspec
+from collections import OrderedDict
 import networkx
 from grasp import commons
 from grasp.asp import asp_from_graph
@@ -49,10 +50,11 @@ def clean(fname:str, target:str=None,
     graph_to_file(graph, target, edge_predicate=target_edge_predicate)
 
 
-def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
-         graphics:bool=False, outdir:str='.',
-         heavy_computations:bool=False, graph_properties:bool=False,
-         edge_predicate:str=edge_predicate) -> dict:
+def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
+               graphics:bool=False, outdir:str='.',
+               heavy_computations:bool=False, graph_properties:bool=False,
+               negative_results:bool=True,
+               edge_predicate:str=edge_predicate) -> dict:
     """Yield (field, value) infos of targets written
 
     info_motifs -- print info about the n first motifs in the graph
@@ -94,17 +96,59 @@ def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
         ...
 
     if heavy_computations:
-        # TODO: bipartite detection
         # TODO: concept and AOC poset size, ratio.
         ...
 
     if graph_properties:
+        non_implemented = []
         for attrname, attr in vars(networkx).items():
             if attrname.startswith('is_'):
+                attrname = attrname[3:]
                 if getfullargspec(attr).args == ['G']:  # only 1 arg
                     try:
-                        yield attrname[3:], attr(graph)  # discard the 'is_'
+                        yield attrname, attr(graph)  # discard the 'is_'
                     except networkx.exception.NetworkXNotImplemented as err:
-                        yield attrname[3:], err.args[0]
+                        non_implemented.append(attrname)
                     except networkx.exception.NetworkXError as err:
-                        yield attrname[3:], err.args[0]
+                        non_implemented.append(attrname)
+
+        properties = ('transitivity', 'average_clustering', 'average_node_connectivity', 'average_shortest_path_length')
+        for attrname in properties:
+            try:
+                yield attrname, getattr(networkx, attrname)(graph)
+            except networkx.exception.NetworkXError as err:
+                non_implemented.append(attrname)
+        if non_implemented and negative_results:
+            yield 'non implemented', non_implemented
+
+
+def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
+         graphics:bool=False, outdir:str='.',
+         heavy_computations:bool=False, graph_properties:bool=False,
+         round_float:int=None,
+         negative_results:bool=True, edge_predicate:str=edge_predicate) -> dict:
+    """Yield lines of text to show"""
+    infos = OrderedDict(yield_info(fname, info_motifs, info_ccs, graphics, outdir, heavy_computations, graph_properties, negative_results, edge_predicate))
+    properties = {True: set(), False: set()}
+    maxkeylen = max(map(len, infos))
+    iter_handler = lambda v: ', '.join(sorted(map(str, v)))
+    type_handler = {
+        str: str,
+        tuple: iter_handler,
+        list: iter_handler,
+        set: iter_handler,
+        int: str,
+        float: (str if round_float is None else lambda v, r=round_float: str(round(v, r))),
+    }
+    def show(field, value, maxkeylen=maxkeylen):
+        return field.rjust(maxkeylen+1) + ' | ' + type_handler[type(value)](value)
+
+    for field, value in infos.items():
+        if isinstance(value, bool):
+            properties[value].add(field)
+        else:
+            yield show(field, value)
+    if negative_results and properties[False]:
+        yield show('¬properties', properties[False])
+    if properties[True]:
+        yield show('properties', properties[True])

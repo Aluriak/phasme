@@ -48,10 +48,14 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
                               help="Perform costly detection of graph features.")
     parser_infos.add_argument('--graph-properties', '-p', action='store_true',
                               help="Use networkx to compute graph properties.")
+    parser_infos.add_argument('--negative-results', '-nr', action='store_true',
+                              help="Show non implemented methods and invalid properties.")
     parser_infos.add_argument('--graphics', '-g', action='store_true',
                               help="Produce and save various graphics and visualizations.")
     parser_infos.add_argument('--outdir', '-o', type=str, default='.',
                               help="Where to put produced files, if any.")
+    parser_infos.add_argument('--round-float', '-r', type=int, default=None,
+                              help='Round floats with given number of figures after dot.')
 
     # split by cc
     parser_split.add_argument('targets', type=str, default=None,
