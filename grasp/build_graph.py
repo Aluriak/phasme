@@ -60,6 +60,11 @@ def graph_to_file(graph, fname:str, edge_predicate:str=edge_predicate, eol:str='
 
 def graph_to_standard_file(graph, fname:str, format:str):
     """Write given graph into file, in given standard format."""
+    if format == 'dot':
+        try:
+            return networkx.drawing.nx_pydot.write_dot(graph, fname)
+        except ImportError:
+            return networkx.drawing.nx_agraph.write_dot(graph, fname)
     return getattr(networkx, 'write_' + format)(graph, fname)
 
 
