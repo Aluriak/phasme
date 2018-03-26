@@ -2,13 +2,35 @@
 Graph with ASP made easy.
 
 
-## CLI example
 
-    python -m grasp split data.lp -o "data_{}.lp" # split a graph by cc
-    python -m grasp infos data.lp
+## Use cases
+
+### Write an ASP graph into gexf
+
+    grasp convert data.lp target.gexf
+
+### Extract the biggest cc, write it anonymized in gml
+
+    grasp split data.lp --biggest-first "data_cc.lp" --slice 0 1
+    grasp convert data_cc_1.lp target.gml --anonymized
+
+### Generate a small world graph in gml
+
+    grasp generate data.gml erdos_renyi_graph n=100 p=0.01
+
+
+## Packaging
+
+    pip install graph-asp
+
+Will also populate your env with the executable `grasp`,
+enabling access to the CLI.
+
+Note that the package *grasp* exists, but is unrelated to this work.
 
 
 ## CLI commands
+CLI provides access to higher level [routines](grasp/routines.py).
 
 - `split`: split by connected component.
 - `info`: give info about given graph.
@@ -16,3 +38,20 @@ Graph with ASP made easy.
 - `generate`: generate a graph using a given generation method.
 <!-- - `compress`: produce the powergraph compression of given graph as a bubble file -->
 <!-- - ``:  -->
+
+### Other examples
+
+    # split a graph by cc
+    python -m grasp split data.lp -o "data_{}.lp"
+
+    # get infos
+    python -m grasp infos data.lp --graph-properties
+
+    # there is a shitload of options
+    python -m grasp infos --help
+
+    # conversions between formats
+    python -m grasp convert data.lp data.gml --anonymize
+
+    # generation of new graphs to play with
+    python -m grasp generate graph.gml powerlaw_cluster_graph n=5 m=2 p=0.01
