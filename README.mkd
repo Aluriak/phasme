@@ -25,12 +25,10 @@ Graph with ASP made easy.
 
 ## Packaging
 
-    pip install graph-asp
+    pip install phasme
 
 Will also populate your env with the executable `phasme`,
 enabling access to the CLI.
-
-Note that the package *phasme* exists, but is unrelated to this work.
 
 
 ## CLI commands
