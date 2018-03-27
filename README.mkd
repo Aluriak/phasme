@@ -9,6 +9,10 @@ Graph with ASP made easy.
 
     phasme convert data.lp target.gexf
 
+### Rewrite a gml graph with normalized node names
+
+    phasme convert data.gml --normalized
+
 ### Extract the biggest cc, write it anonymized in gml
 
     phasme split data.lp --biggest-first "data_cc.lp" --slice 0 1
@@ -34,7 +38,7 @@ CLI provides access to higher level [routines](phasme/routines.py).
 
 - `split`: split by connected component.
 - `info`: give info about given graph.
-- `convert`: rewrite, anonymize or convert the graph to (clean) ASP or standard format.
+- `convert`: rewrite, anonymize, normalize or convert the graph to (clean) ASP or standard format.
 - `generate`: generate a graph using a given generation method.
 <!-- - `compress`: produce the powergraph compression of given graph as a bubble file -->
 <!-- - ``:  -->

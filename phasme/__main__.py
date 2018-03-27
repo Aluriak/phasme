@@ -30,6 +30,7 @@ def run_cli():
     elif args.command == 'convert':
         routines.convert(args.infile, args.target,
                          anonymize=args.anonymize,
+                         normalize=args.normalize,
                          edge_predicate=args.edge_predicate,
                          target_edge_predicate=args.target_edge_predicate)
     elif args.command == 'generate':

@@ -9,7 +9,7 @@ from phasme import commons
 from phasme.asp import asp_from_graph
 from phasme.info import info
 from phasme.commons import edge_predicate
-from phasme.build_graph import graph_from_file, graph_to_file, graph_from_networkx_method, anonymized
+from phasme.build_graph import graph_from_file, graph_to_file, graph_from_networkx_method, anonymized, normalized
 
 
 def split_by_cc(fname:str, targets:str=None, order:str=None, slice=None,
@@ -49,11 +49,12 @@ def split_by_cc(fname:str, targets:str=None, order:str=None, slice=None,
 
 
 def convert(fname:str, target:str=None, anonymize:bool=False,
-            edge_predicate:str=edge_predicate,
+            normalize:bool=False, edge_predicate:str=edge_predicate,
             target_edge_predicate:str=edge_predicate) -> dict:
     """Write in target the very same graph as input, but in
     an clean ASP expanded format.
 
+    normalize -- avoid special characters in node names.
     anonymize -- rename nodes into integers.
     target -- file to write. If None or equal to fname, overwrite.
     target_edge_predicate -- edge predicate to use in rewritten file.
@@ -64,6 +65,7 @@ def convert(fname:str, target:str=None, anonymize:bool=False,
     if not target:  target = fname
     graph = graph_from_file(fname, edge_predicate=edge_predicate)
     if anonymize:  graph = anonymized(graph)
+    if normalize:  graph = normalized(graph)
     graph_to_file(graph, target, edge_predicate=target_edge_predicate)
 
 

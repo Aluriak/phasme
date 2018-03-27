@@ -4,7 +4,7 @@ import itertools
 from collections import defaultdict
 from phasme import commons
 from phasme.asp import asp_from_graph
-from phasme.commons import edge_predicate
+from phasme.commons import edge_predicate, fixed_name
 from phasme.extract_links import links_from_file, links_from_dirty_file
 from phasme.extract_links import links_from_lines, links_from_dirty_lines
 
@@ -91,4 +91,22 @@ def anonymized(graph):
     anon = type(graph)()
     for source, target in graph.edges:
         anon.add_edge(name[source], name[target])
+    return anon
+
+
+def normalized(graph, **fixed_name_kwargs):
+    """Return a new graph, equivalent to given one but with node names changed
+    to avoid any non alphanumeric character.
+    """
+
+    name_map = {n: fixed_name(n, keep_quotes=True, **fixed_name_kwargs) for n in graph.nodes}
+    nb_new_names = sum(1 for _ in name_map.values())
+    if len(name_map) != nb_new_names:
+        diff = frozenset(name_map) - frozenset(name_map.values())
+        raise RuntimeError("Normalization routine do not handle given graph. {} "
+                           "nodes are lost because of name collision : "
+                           "".format(len(diff), ', '.join(map(str, diff))))
+    anon = type(graph)()
+    for source, target in graph.edges:
+        anon.add_edge(name_map[source], name_map[target])
     return anon
