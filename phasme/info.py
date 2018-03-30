@@ -24,6 +24,7 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
     outdir = commons.normalize_filename(outdir)
     graph = graph_from_file(fname, edge_predicate=edge_predicate)
     nb_node, nb_edge = len(graph.nodes), len(graph.edges)
+    nb_self_loops = sum(1 for _ in graph.selfloop_edges())
     def density(nb_node, nb_edge):
         try:
             return 2 * nb_edge / (nb_node * (nb_node - 1))
@@ -33,6 +34,11 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
 
     yield '#node', nb_node
     yield '#edge', nb_edge
+    if nb_self_loops:
+        yield '#loop', nb_self_loops
+        yield '#edge - #loop', nb_edge - nb_self_loops
+    else:
+        yield 'no loop', True
     yield 'density', density(nb_node, nb_edge)
 
     if info_motifs:
@@ -101,7 +107,7 @@ def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
         float: (str if round_float is None else lambda v, r=round_float: str(round(v, r))),
     }
     def show(field, value, maxkeylen=maxkeylen):
-        return field.rjust(maxkeylen+1) + ' | ' + type_handler[type(value)](value)
+        return field.rjust(maxkeylen+2) + ' | ' + type_handler[type(value)](value)
 
     for field, value in infos.items():
         if isinstance(value, bool):
