@@ -12,6 +12,7 @@ def run_cli():
         infos = routines.info(args.infile, args.motifs, args.no_cc,
                               graphics=args.graphics, outdir=args.outdir,
                               heavy_computations=args.heavy_computations,
+                              special_nodes=args.special_nodes,
                               graph_properties=args.graph_properties,
                               round_float=args.round_float,
                               negative_results=args.negative_results,

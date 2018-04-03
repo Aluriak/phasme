@@ -12,6 +12,7 @@ from phasme.build_graph import graph_from_file
 
 def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
                graphics:bool=False, outdir:str='.',
+               special_nodes:bool=False,
                heavy_computations:bool=False, graph_properties:bool=False,
                negative_results:bool=True,
                edge_predicate:str=edge_predicate) -> dict:
@@ -59,11 +60,19 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
     if graphics:
         # TODO: degree distribution (lin-lin, log-lin, lin-log, log-log)
         # TODO: motif size distribution (if info_motifs > 1)
+        # TODO: degree function to clustering coefficient
         ...
 
     if heavy_computations:
-        # TODO: concept and AOC poset size, ratio.
+        # TODO: concept and AOC poset size and ratio.
         ...
+
+    if special_nodes:
+        # TODO: equivalences
+        arti_points = tuple(networkx.articulation_points(graph))
+        yield '#articulation points', len(arti_points)
+        if arti_points:
+            yield 'articulation points', arti_points
 
     if graph_properties:
         non_implemented = []
@@ -90,11 +99,12 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
 
 def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
          graphics:bool=False, outdir:str='.',
-         heavy_computations:bool=False, graph_properties:bool=False,
+         special_nodes:bool=False, heavy_computations:bool=False,
+         graph_properties:bool=False,
          round_float:int=None,
          negative_results:bool=True, edge_predicate:str=edge_predicate) -> dict:
     """Yield lines of text describing given graph info."""
-    infos = OrderedDict(yield_info(fname, info_motifs, info_ccs, graphics, outdir, heavy_computations, graph_properties, negative_results, edge_predicate))
+    infos = OrderedDict(yield_info(fname, info_motifs, info_ccs, graphics, outdir, special_nodes, heavy_computations, graph_properties, negative_results, edge_predicate))
     properties = {True: set(), False: set()}
     maxkeylen = max(map(len, infos))
     iter_handler = lambda v: ', '.join(sorted(map(str, v)))
