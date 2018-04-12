@@ -1,6 +1,6 @@
 
 i:
-	python -m phasme infos data/test.gml --graph-properties --negative-results --round-float 3
+	python -m phasme infos data/test.gml --graph-properties --negative-results --round-float 3 -sn
 c:
 	python -m phasme convert data/bad.lp todel.gml --anonymize
 	cat todel.gml
