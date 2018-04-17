@@ -8,6 +8,7 @@ from collections import OrderedDict
 from phasme import commons
 from phasme.commons import edge_predicate
 from phasme.build_graph import graph_from_file
+from phasme import graphics as graphics_module
 
 
 def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
@@ -56,12 +57,9 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
             yield '#node/cc (mean)', sum(node_per_cc) / len(node_per_cc)
             yield 'density/cc', tuple(density(len(nodes), len(tuple(cc.edges))) for cc, nodes in zip(ccs, ccs_nodes))
 
-
     if graphics:
-        # TODO: degree distribution (lin-lin, log-lin, lin-log, log-log)
-        # TODO: motif size distribution (if info_motifs > 1)
-        # TODO: degree function to clustering coefficient
-        ...
+        nb_graphics = sum(1 for _ in graphics_module.make_all(graph, outdir))
+        yield '#graphics', nb_graphics
 
     if heavy_computations:
         # TODO: concept and AOC poset size and ratio.
