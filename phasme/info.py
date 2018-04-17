@@ -8,6 +8,7 @@ from collections import OrderedDict
 from phasme import commons
 from phasme.commons import edge_predicate
 from phasme.build_graph import graph_from_file
+from phasme.graphics import make_all
 
 
 def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
@@ -53,7 +54,7 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
     if graphics:
         # TODO: degree distribution (lin-lin, log-lin, lin-log, log-log)
         # TODO: motif size distribution (if info_motifs > 1)
-        ...
+        make_all(graph, outdir)
 
     if heavy_computations:
         # TODO: concept and AOC poset size, ratio.
