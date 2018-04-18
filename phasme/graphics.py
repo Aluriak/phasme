@@ -9,6 +9,10 @@ def make_all(graph, outdir):
     make_coef_distrib(graph, outdir)
     make_coef_distrib_stacked(graph, outdir)
 
+    outfile = make_gerard_coef(graph, outdir)
+    yield outfile, make_gerard_coef.__doc__.splitlines(False)[0]
+    ...  # more functions to call
+
 
 def make_degree_distrib(graph, outdir, bins: int = 100, no_one: bool = False, log: bool = False):
     """Create a distribution histogram of the degrees"""
@@ -43,6 +47,7 @@ def make_degree_distrib(graph, outdir, bins: int = 100, no_one: bool = False, lo
         i += 1
 
     plt.savefig(file_name)
+    return file_name
 
 
 def make_coef_distrib(graph, outdir, bins: int = 100, no_zero: bool = False, log: bool = False):
@@ -78,6 +83,7 @@ def make_coef_distrib(graph, outdir, bins: int = 100, no_zero: bool = False, log
         i += 1
 
     plt.savefig(file_name)
+    return file_name
 
 # TODO add parameters to choose the threshold values + colors
 def make_coef_distrib_stacked(graph, outdir, bins: int = 100, no_zero: bool = False,
@@ -161,3 +167,4 @@ def make_coef_distrib_stacked(graph, outdir, bins: int = 100, no_zero: bool = Fa
         i += 1
 
     plt.savefig(file_name)
+    return file_name
