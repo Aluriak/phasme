@@ -12,14 +12,15 @@ import os
 
 
 def make_all(graph, outdir):
+    get_description = lambda f: f.__doc__.splitlines(False)[0]
     outfile = make_degree_distrib(graph, outdir)
-    yield outfile, make_degree_distrib.__doc__.splitlines(False)[0]
+    yield outfile, get_description(make_degree_distrib)
 
     outfile = make_coef_distrib(graph, outdir)
-    yield outfile, make_coef_distrib.__doc__.splitlines(False)[0]
+    yield outfile, get_description(make_coef_distrib)
 
     outfile = make_coef_distrib_stacked(graph, outdir)
-    yield outfile, make_coef_distrib_stacked.__doc__.splitlines(False)[0]
+    yield outfile, get_description(make_coef_distrib_stacked)
 
     ...  # more functions to call
 
