@@ -65,7 +65,7 @@ def make_coef_distrib(graph, outdir, bins: int = 100, no_zero: bool = False, log
     coefs = list(nx.clustering(graph).values())
 
     color = "blue"
-    title = "Degree distribution"
+    title = "Coef distribution"
     data_list = coefs[:]
     # remove the values equal to 1
     if no_zero:
@@ -89,7 +89,7 @@ def make_coef_distrib(graph, outdir, bins: int = 100, no_zero: bool = False, log
     i = 1
     file_name = "{}coef_distrib.png".format(outdir)
     while os.path.exists(file_name):
-        file_name = "{}dcoef_distrib_{}.png".format(outdir, i)
+        file_name = "{}coef_distrib_{}.png".format(outdir, i)
         i += 1
 
     plt.savefig(file_name)
@@ -174,7 +174,7 @@ def make_coef_distrib_stacked(graph, outdir, bins: int = 100, no_zero: bool = Fa
     i = 1
     file_name = "{}coef_distrib_stacked.png".format(outdir)
     while os.path.exists(file_name):
-        file_name = "{}dcoef_distrib_stacked_{}.png".format(outdir, i)
+        file_name = "{}coef_distrib_stacked_{}.png".format(outdir, i)
         i += 1
 
     plt.savefig(file_name)
