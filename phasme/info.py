@@ -8,11 +8,7 @@ from collections import OrderedDict
 from phasme import commons
 from phasme.commons import edge_predicate
 from phasme.build_graph import graph_from_file
-<<<<<<< HEAD
-from phasme.graphics import make_all
-=======
 from phasme import graphics as graphics_module
->>>>>>> upstream/impl/graphics
 
 
 def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,

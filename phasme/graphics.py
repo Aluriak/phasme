@@ -1,8 +1,3 @@
-import matplotlib.pyplot as plt
-import networkx as nx
-import numpy as np
-import os
-
 """Module containing general routines for graphics generation
 using pandas/matplotlib.
 
@@ -10,18 +5,27 @@ Used by routines to produce loads of visualizations.
 
 """
 
-def make_all(graph, outdir):
-    make_degree_distrib(graph, outdir)
-    make_coef_distrib(graph, outdir)
-    make_coef_distrib_stacked(graph, outdir)
+import matplotlib.pyplot as plt
+import networkx as nx
+import numpy as np
+import os
 
-    outfile = make_gerard_coef(graph, outdir)
-    yield outfile, make_gerard_coef.__doc__.splitlines(False)[0]
+
+def make_all(graph, outdir):
+    outfile = make_degree_distrib(graph, outdir)
+    yield outfile, make_degree_distrib.__doc__.splitlines(False)[0]
+
+    outfile = make_coef_distrib(graph, outdir)
+    yield outfile, make_coef_distrib.__doc__.splitlines(False)[0]
+
+    outfile = make_coef_distrib_stacked(graph, outdir)
+    yield outfile, make_coef_distrib_stacked.__doc__.splitlines(False)[0]
+
     ...  # more functions to call
 
 
 def make_degree_distrib(graph, outdir, bins: int = 100, no_one: bool = False, log: bool = False):
-    """Create a distribution histogram of the degrees"""
+    """degree distribution histogram"""
     degrees = list(graph.degree().values())
 
     color = "green"
@@ -57,7 +61,7 @@ def make_degree_distrib(graph, outdir, bins: int = 100, no_one: bool = False, lo
 
 
 def make_coef_distrib(graph, outdir, bins: int = 100, no_zero: bool = False, log: bool = False):
-    """Create a distribution histogram of the clustering coefficients"""
+    """clustering coefficient distribution histogram"""
     coefs = list(nx.clustering(graph).values())
 
     color = "blue"
@@ -91,10 +95,11 @@ def make_coef_distrib(graph, outdir, bins: int = 100, no_zero: bool = False, log
     plt.savefig(file_name)
     return file_name
 
+
 # TODO add parameters to choose the threshold values + colors
 def make_coef_distrib_stacked(graph, outdir, bins: int = 100, no_zero: bool = False,
                               log: bool = False):
-    """
+    """clustering coefficient distribution histogram with different degree categories
     Create a distribution histogram of the local clustering coefficients.
     4 colors for each bar, ex:
         - green: degree <= 4
@@ -174,4 +179,3 @@ def make_coef_distrib_stacked(graph, outdir, bins: int = 100, no_zero: bool = Fa
 
     plt.savefig(file_name)
     return file_name
-
