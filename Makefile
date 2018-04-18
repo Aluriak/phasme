@@ -1,12 +1,14 @@
 
 i:
-	python -m phasme infos data/test.gml --graph-properties --negative-results --round-float 3
+	python -m phasme infos data/test.gml --graph-properties --negative-results --round-float 3 -sn
 c:
 	python -m phasme convert data/bad.lp todel.gml --anonymize
 	cat todel.gml
 	rm todel.gml
 g:
 	python -m phasme generate out/todel powerlaw_cluster_graph n=5 m=2 p=0.01
+tex:
+	python -m phasme convert data/realgraph.lp todel.tex
 
 
 t: test

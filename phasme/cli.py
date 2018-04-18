@@ -49,6 +49,8 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
                               help="Search for biggest motifs stats.")
     parser_infos.add_argument('--heavy-computations', '-c', action='store_true',
                               help="Perform costly detection of graph features.")
+    parser_infos.add_argument('--special-nodes', '-sn', action='store_true',
+                              help="Detect and show special nodes.")
     parser_infos.add_argument('--graph-properties', '-p', action='store_true',
                               help="Use networkx to compute graph properties.")
     parser_infos.add_argument('--negative-results', '-nr', action='store_true',

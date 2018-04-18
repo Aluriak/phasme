@@ -8,11 +8,16 @@ from collections import OrderedDict
 from phasme import commons
 from phasme.commons import edge_predicate
 from phasme.build_graph import graph_from_file
+<<<<<<< HEAD
 from phasme.graphics import make_all
+=======
+from phasme import graphics as graphics_module
+>>>>>>> upstream/impl/graphics
 
 
 def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
                graphics:bool=False, outdir:str='.',
+               special_nodes:bool=False,
                heavy_computations:bool=False, graph_properties:bool=False,
                negative_results:bool=True,
                edge_predicate:str=edge_predicate) -> dict:
@@ -25,6 +30,7 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
     outdir = commons.normalize_filename(outdir)
     graph = graph_from_file(fname, edge_predicate=edge_predicate)
     nb_node, nb_edge = len(graph.nodes), len(graph.edges)
+    nb_self_loops = sum(1 for _ in graph.selfloop_edges())
     def density(nb_node, nb_edge):
         try:
             return 2 * nb_edge / (nb_node * (nb_node - 1))
@@ -34,6 +40,11 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
 
     yield '#node', nb_node
     yield '#edge', nb_edge
+    if nb_self_loops:
+        yield '#loop', nb_self_loops
+        yield '#edge - #loop', nb_edge - nb_self_loops
+    else:
+        yield 'no loop', True
     yield 'density', density(nb_node, nb_edge)
 
     if info_motifs:
@@ -50,15 +61,21 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
             yield '#node/cc (mean)', sum(node_per_cc) / len(node_per_cc)
             yield 'density/cc', tuple(density(len(nodes), len(tuple(cc.edges))) for cc, nodes in zip(ccs, ccs_nodes))
 
-
     if graphics:
-        # TODO: degree distribution (lin-lin, log-lin, lin-log, log-log)
-        # TODO: motif size distribution (if info_motifs > 1)
-        make_all(graph, outdir)
+
+        nb_graphics = sum(1 for _ in graphics_module.make_all(graph, outdir))
+        yield '#graphics', nb_graphics
 
     if heavy_computations:
-        # TODO: concept and AOC poset size, ratio.
+        # TODO: concept and AOC poset size and ratio.
         ...
+
+    if special_nodes:
+        # TODO: equivalences
+        arti_points = tuple(networkx.articulation_points(graph))
+        yield '#articulation points', len(arti_points)
+        if arti_points:
+            yield 'articulation points', arti_points
 
     if graph_properties:
         non_implemented = []
@@ -85,11 +102,12 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
 
 def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
          graphics:bool=False, outdir:str='.',
-         heavy_computations:bool=False, graph_properties:bool=False,
+         special_nodes:bool=False, heavy_computations:bool=False,
+         graph_properties:bool=False,
          round_float:int=None,
          negative_results:bool=True, edge_predicate:str=edge_predicate) -> dict:
     """Yield lines of text describing given graph info."""
-    infos = OrderedDict(yield_info(fname, info_motifs, info_ccs, graphics, outdir, heavy_computations, graph_properties, negative_results, edge_predicate))
+    infos = OrderedDict(yield_info(fname, info_motifs, info_ccs, graphics, outdir, special_nodes, heavy_computations, graph_properties, negative_results, edge_predicate))
     properties = {True: set(), False: set()}
     maxkeylen = max(map(len, infos))
     iter_handler = lambda v: ', '.join(sorted(map(str, v)))
@@ -102,7 +120,7 @@ def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
         float: (str if round_float is None else lambda v, r=round_float: str(round(v, r))),
     }
     def show(field, value, maxkeylen=maxkeylen):
-        return field.rjust(maxkeylen+1) + ' | ' + type_handler[type(value)](value)
+        return field.rjust(maxkeylen+2) + ' | ' + type_handler[type(value)](value)
 
     for field, value in infos.items():
         if isinstance(value, bool):

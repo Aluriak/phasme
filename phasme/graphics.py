@@ -3,6 +3,12 @@ import networkx as nx
 import numpy as np
 import os
 
+"""Module containing general routines for graphics generation
+using pandas/matplotlib.
+
+Used by routines to produce loads of visualizations.
+
+"""
 
 def make_all(graph, outdir):
     make_degree_distrib(graph, outdir)
@@ -168,3 +174,4 @@ def make_coef_distrib_stacked(graph, outdir, bins: int = 100, no_zero: bool = Fa
 
     plt.savefig(file_name)
     return file_name
+

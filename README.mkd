@@ -57,3 +57,14 @@ CLI provides access to higher level [routines](phasme/routines.py).
 
     # generation of new graphs to play with
     python -m phasme generate graph.gml powerlaw_cluster_graph n=5 m=2 p=0.01
+
+    # ready-to-draw tikz visualization of ASP graph
+    python -m phasme convert data.lp graph-in-latex-tikz.tex
+
+
+## Changelog
+
+- 0.0.12
+    - convert: new output format: latex/tikz
+    - infos: give infos on articulation points
+    - infos: indicate number of self loops, if any, or give property 'no loop'

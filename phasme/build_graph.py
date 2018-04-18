@@ -3,6 +3,7 @@ import networkx
 import itertools
 from collections import defaultdict
 from phasme import commons
+from phasme import graph_to_tex
 from phasme.asp import asp_from_graph
 from phasme.commons import edge_predicate, fixed_name
 from phasme.extract_links import links_from_file, links_from_dirty_file
@@ -65,6 +66,8 @@ def graph_to_standard_file(graph, fname:str, format:str):
             return networkx.drawing.nx_pydot.write_dot(graph, fname)
         except ImportError:
             return networkx.drawing.nx_agraph.write_dot(graph, fname)
+    if format == 'tex':
+        return graph_to_tex.graph_to_file(graph, fname)
     return getattr(networkx, 'write_' + format)(graph, fname)
 
 
