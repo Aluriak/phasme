@@ -1,35 +1,39 @@
-"""Module containing general routines for graphics generation
-using pandas/matplotlib.
+"""Module containing general routines for graphics generation using pandas/matplotlib.
 
 Used by routines to produce loads of visualizations.
 
 """
-
+import inspect
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import os
 
 
-def make_all(graph, outdir):
+def make_all(graph, outdir: str, params: dict = None):
+    """
+    Make all the graphs, yield the outfile name and its description.
+    params = {arg: value}
+    """
     get_description = lambda f: f.__doc__.splitlines(False)[0]
-    outfile = make_degree_distrib(graph, outdir)
-    yield outfile, get_description(make_degree_distrib)
+    get_args = lambda f: inspect.getfullargspec(f)[0]
 
-    outfile = make_coef_distrib(graph, outdir)
-    yield outfile, get_description(make_coef_distrib)
+    # list containing the graphics functions
+    func_list = [v for k, v in globals().items() if k.startswith("make_graphics")]
 
-    outfile = make_coef_distrib_stacked(graph, outdir)
-    yield outfile, get_description(make_coef_distrib_stacked)
+    for func in func_list:
+        func_params = get_args(func)
+        outfile = func(graph, outdir, **{p: v for p, v in params.items() if p in func_params})
+        yield outfile, get_description(func)
 
     ...  # more functions to call
 
 
-def make_degree_distrib(graph, outdir, bins: int = 100, no_one: bool = False, log: bool = False):
+def make_graphics_degree(graph, outdir: str, bins: int = 50, no_one: bool = False,
+                         log: bool = False, degree_color: str = 'green'):
     """degree distribution histogram"""
     degrees = list(graph.degree().values())
 
-    color = "green"
     title = "Degree distribution"
     data_list = degrees[:]
     # remove the values equal to 1
@@ -39,7 +43,7 @@ def make_degree_distrib(graph, outdir, bins: int = 100, no_one: bool = False, lo
     # number of bars
     num_bins = bins
     x = data_list
-    plt.hist(x, num_bins, edgecolor='black', facecolor=color, alpha=0.5)
+    plt.hist(x, num_bins, edgecolor='black', facecolor=degree_color, alpha=0.8)
 
     # log scale
     if log:
@@ -52,20 +56,23 @@ def make_degree_distrib(graph, outdir, bins: int = 100, no_one: bool = False, lo
 
     # choose file name
     i = 1
-    file_name = "{}degree_distrib.png".format(outdir)
+    file_name = "{}/degree_distrib.png".format(outdir)
     while os.path.exists(file_name):
-        file_name = "{}degree_distrib_{}.png".format(outdir, i)
+        file_name = "{}/degree_distrib_{}.png".format(outdir, i)
         i += 1
 
     plt.savefig(file_name)
+    # clear the current figure
+    plt.clf()
+    file_name = os.path.basename(file_name)
     return file_name
 
 
-def make_coef_distrib(graph, outdir, bins: int = 100, no_zero: bool = False, log: bool = False):
+def make_graphics_coef(graph, outdir: str, bins: int = 50, no_zero: bool = False,
+                       log: bool = False, coef_color: str = 'blue'):
     """clustering coefficient distribution histogram"""
     coefs = list(nx.clustering(graph).values())
 
-    color = "blue"
     title = "Coef distribution"
     data_list = coefs[:]
     # remove the values equal to 1
@@ -75,7 +82,7 @@ def make_coef_distrib(graph, outdir, bins: int = 100, no_zero: bool = False, log
     # number of bars
     num_bins = bins
     x = data_list
-    plt.hist(x, num_bins, edgecolor='black', facecolor=color, alpha=0.5)
+    plt.hist(x, num_bins, edgecolor='black', facecolor=coef_color, alpha=0.8)
 
     # log scale
     if log:
@@ -88,18 +95,21 @@ def make_coef_distrib(graph, outdir, bins: int = 100, no_zero: bool = False, log
 
     # choose file name
     i = 1
-    file_name = "{}coef_distrib.png".format(outdir)
+    file_name = "{}/coef_distrib.png".format(outdir)
     while os.path.exists(file_name):
-        file_name = "{}coef_distrib_{}.png".format(outdir, i)
+        file_name = "{}/coef_distrib_{}.png".format(outdir, i)
         i += 1
 
     plt.savefig(file_name)
+    # clear the current figure
+    plt.clf()
+    file_name = os.path.basename(file_name)
     return file_name
 
 
 # TODO add parameters to choose the threshold values + colors
-def make_coef_distrib_stacked(graph, outdir, bins: int = 100, no_zero: bool = False,
-                              log: bool = False):
+def make_graphics_coef_stacked(graph, outdir: str, bins: int = 50, no_zero: bool = False,
+                               log: bool = False):
     """clustering coefficient distribution histogram with different degree categories
     Create a distribution histogram of the local clustering coefficients.
     4 colors for each bar, ex:
@@ -111,7 +121,7 @@ def make_coef_distrib_stacked(graph, outdir, bins: int = 100, no_zero: bool = Fa
     degrees = graph.degree()
     coefs = nx.clustering(graph)
 
-    title = "Local clustering coefficient distribution"
+    title = "Local clustering coefficient distribution with degree"
 
     # choose the colors and the different thresholds
     limit_list = [4, 10, 30]
@@ -151,7 +161,7 @@ def make_coef_distrib_stacked(graph, outdir, bins: int = 100, no_zero: bool = Fa
 
     num_bins = bins
     plt.hist(x, num_bins, edgecolor='black', histtype='bar', stacked=True, color=colors,
-             label=labels)
+             label=labels, alpha=0.8)
 
     # change axis length
     ymax = plt.gca().get_ybound()
@@ -173,10 +183,13 @@ def make_coef_distrib_stacked(graph, outdir, bins: int = 100, no_zero: bool = Fa
 
     # choose file name
     i = 1
-    file_name = "{}coef_distrib_stacked.png".format(outdir)
+    file_name = "{}/coef_distrib_stacked.png".format(outdir)
     while os.path.exists(file_name):
-        file_name = "{}coef_distrib_stacked_{}.png".format(outdir, i)
+        file_name = "{}/coef_distrib_stacked_{}.png".format(outdir, i)
         i += 1
 
     plt.savefig(file_name)
+    # clear the current figure
+    plt.clf()
+    file_name = os.path.basename(file_name)
     return file_name

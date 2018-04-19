@@ -58,7 +58,6 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
             yield 'density/cc', tuple(density(len(nodes), len(tuple(cc.edges))) for cc, nodes in zip(ccs, ccs_nodes))
 
     if graphics:
-
         nb_graphics = sum(1 for _ in graphics_module.make_all(graph, outdir))
         yield '#graphics', nb_graphics
 
