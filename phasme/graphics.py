@@ -12,7 +12,7 @@ import os
 
 def make_all(graph, outdir: str, params: dict = None):
     """
-    Make all the graphs, yield the outfile name and its description.
+    Make all the graphs, yield the outfiles name and their description.
     params = {arg: value}
     """
     get_description = lambda f: f.__doc__.splitlines(False)[0]
