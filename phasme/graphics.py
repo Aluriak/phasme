@@ -107,39 +107,43 @@ def make_graphics_coef(graph, outdir: str, bins: int = 50, no_zero: bool = False
     return file_name
 
 
-# TODO add parameters to choose the threshold values + colors
 def make_graphics_coef_stacked(graph, outdir: str, bins: int = 50, no_zero: bool = False,
-                               log: bool = False):
+                               log: bool = False, stacked_limits: list = None,
+                               stacked_colors: list = None):
     """clustering coefficient distribution histogram with different degree categories
     Create a distribution histogram of the local clustering coefficients.
-    4 colors for each bar, ex:
+    By default, 4 colors for each bar:
         - green: degree <= 4
         - yellow/green: 4 < degree <= 10
         - yellow: 10 < degree <= 30
         - red: degree > 30
     """
+    # default colors and the different thresholds
+    if stacked_limits is None:
+        stacked_limits = [4, 10, 30]
+    if stacked_colors is None:
+        stacked_colors = ['mediumseagreen', 'greenyellow', 'gold', 'orangered']
+    # TODO define a default color list depending on the threshold list length, ex: default gradient
+    assert len(stacked_colors) == len(stacked_limits) + 1, "Colors length must be equal to Limits" \
+                                                           " length + 1"
+
     degrees = graph.degree()
     coefs = nx.clustering(graph)
 
     title = "Local clustering coefficient distribution with degree"
 
-    # choose the colors and the different thresholds
-    limit_list = [4, 10, 30]
-    colors = ['mediumseagreen', 'greenyellow', 'gold', 'orangered']
-    assert len(colors) == len(limit_list) + 1, "Colors length is not ok"
-
     x = []
-    for i in range(len(limit_list) + 1):
+    for i in range(len(stacked_limits) + 1):
         # retrieve the nodes for each degree category
         # first value
         if i == 0:
-            node_degree = {k: v for (k, v) in degrees.items() if v <= limit_list[i]}
+            node_degree = {k: v for (k, v) in degrees.items() if v <= stacked_limits[i]}
         # last value
-        elif i == len(limit_list):
-            node_degree = {k: v for (k, v) in degrees.items() if v > limit_list[i - 1]}
+        elif i == len(stacked_limits):
+            node_degree = {k: v for (k, v) in degrees.items() if v > stacked_limits[i - 1]}
         else:
-            node_degree = {k: v for (k, v) in degrees.items() if limit_list[i - 1] <= v <=
-                           limit_list[i]}
+            node_degree = {k: v for (k, v) in degrees.items() if stacked_limits[i - 1] <= v <=
+                           stacked_limits[i]}
         # retrieve the coef for the selected nodes
         node_coef = {k: v for (k, v) in coefs.items() if k in node_degree}
         # retrieve the list of values from node_coef
@@ -154,13 +158,13 @@ def make_graphics_coef_stacked(graph, outdir: str, bins: int = 50, no_zero: bool
 
     # set the legend
     labels = []
-    for i in range(len(limit_list)):
-        labels.append("degree <= {}".format(limit_list[i]))
+    for i in range(len(stacked_limits)):
+        labels.append("degree <= {}".format(stacked_limits[i]))
     # add last legend item
-    labels.append("degree > {}".format(limit_list[-1]))
+    labels.append("degree > {}".format(stacked_limits[-1]))
 
     num_bins = bins
-    plt.hist(x, num_bins, edgecolor='black', histtype='bar', stacked=True, color=colors,
+    plt.hist(x, num_bins, edgecolor='black', histtype='bar', stacked=True, color=stacked_colors,
              label=labels, alpha=0.8)
 
     # change axis length
