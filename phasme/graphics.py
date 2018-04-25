@@ -26,8 +26,7 @@ def make_all(graph, outdir:str, params:dict=None):
     for func in func_list:
         func_params = get_args(func)
         outfile = func(graph, outdir, **{p: v for p, v in params.items() if p in func_params})
-        # TODO change print to yield
-        print(outfile, get_description(func))
+        yield outfile, get_description(func)
 
     ...  # more functions to call
 
@@ -222,8 +221,3 @@ def make_graphics_coef_stacked(graph, outdir:str, bins:int=50, no_zero:bool=Fals
     plt.clf()
     file_name = os.path.basename(outfile_path)
     return file_name
-
-g = nx.balanced_tree(3, 3)
-outdir = "/run/media/linnguye/LINHCHI_16/phasme_test"
-d = {'logyscale': True}
-make_all(g, outdir, params=d)
