@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from operator import itemgetter
 from phasme import cli
 from phasme import routines
 
