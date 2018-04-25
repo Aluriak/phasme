@@ -30,11 +30,11 @@ def make_all(graph, outdir:str, params:dict=None):
 
 
 def choose_name(outdir, file_name:str):
-    i = 1
-    file_path = f"{outdir}/{file_name}.png"
+    idx = 1
+    file_path = '{}/{}.png'.format(outdir, file_name)
     while os.path.exists(file_path):
-        file_path = f"{outdir}/{file_name}_{i}.png"
-        i += 1
+        file_path = '{}/{}_{}.png'.format(outdir, file_name, idx)
+        idx += 1
     return file_path
 
 

@@ -10,7 +10,9 @@ def run_cli():
 
     if args.command == 'infos':
         infos = routines.info(args.infile, args.motifs, args.no_cc,
-                              graphics=args.graphics, outdir=args.outdir,
+                              graphics=args.graphics,
+                              graphics_params=args.graphics_params,
+                              outdir=args.outdir,
                               heavy_computations=args.heavy_computations,
                               special_nodes=args.special_nodes,
                               graph_properties=args.graph_properties,

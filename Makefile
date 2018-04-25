@@ -7,6 +7,8 @@ c:
 	rm todel.gml
 g:
 	python -m phasme generate out/todel powerlaw_cluster_graph n=5 m=2 p=0.01
+graphics:
+	python -m phasme infos data/test.gml --graphics --graphics-params logxscale=1 logyscale=1
 tex:
 	python -m phasme convert data/realgraph.lp todel.tex
 
