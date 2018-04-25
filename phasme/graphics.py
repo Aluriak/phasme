@@ -1,4 +1,4 @@
-"""Module containing general routines for graphics generation using pandas/matplotlib.
+"""Module containing general routines for graphics generation using matplotlib.
 
 Used by routines to produce loads of visualizations.
 
@@ -27,8 +27,6 @@ def make_all(graph, outdir:str, params:dict=None):
         func_params = get_args(func)
         outfile = func(graph, outdir, **{p: v for p, v in params.items() if p in func_params})
         yield outfile, get_description(func)
-
-    ...  # more functions to call
 
 
 def choose_name(outdir, file_name:str):
