@@ -10,7 +10,7 @@ import numpy as np
 import os
 
 
-def make_all(graph, outdir: str, params: dict = None):
+def make_all(graph, outdir:str, params:dict=None):
     """
     Make all the graphs, yield the outfiles name and their description.
     params = {arg: value}
@@ -29,8 +29,8 @@ def make_all(graph, outdir: str, params: dict = None):
     ...  # more functions to call
 
 
-def make_graphics_degree(graph, outdir: str, bins: int = 50, no_one: bool = False,
-                         log: bool = False, degree_color: str = 'green'):
+def make_graphics_degree(graph, outdir:str, bins:int=50, no_one:bool=False,
+                         log:bool=False, degree_color:str='green'):
     """degree distribution histogram"""
     degrees = list(graph.degree().values())
 
@@ -68,14 +68,14 @@ def make_graphics_degree(graph, outdir: str, bins: int = 50, no_one: bool = Fals
     return file_name
 
 
-def make_graphics_coef(graph, outdir: str, bins: int = 50, no_zero: bool = False,
-                       log: bool = False, coef_color: str = 'blue'):
+def make_graphics_coef(graph, outdir:str, bins:int=50, no_zero:bool=False,
+                       log:bool=False, coef_color:str='blue'):
     """clustering coefficient distribution histogram"""
     coefs = list(nx.clustering(graph).values())
 
     title = "Coef distribution"
     data_list = coefs[:]
-    # remove the values equal to 1
+    # remove the values equal to 0
     if no_zero:
         data_list = [x for x in data_list if x != 0]
         title += " - without zero"
@@ -107,9 +107,9 @@ def make_graphics_coef(graph, outdir: str, bins: int = 50, no_zero: bool = False
     return file_name
 
 
-def make_graphics_coef_stacked(graph, outdir: str, bins: int = 50, no_zero: bool = False,
-                               log: bool = False, stacked_limits: list = None,
-                               stacked_colors: list = None):
+def make_graphics_coef_stacked(graph, outdir:str, bins:int=50, no_zero:bool=False,
+                               log:bool=False, stacked_limits:list=None,
+                               stacked_colors:list=None):
     """clustering coefficient distribution histogram with different degree categories
     Create a distribution histogram of the local clustering coefficients.
     By default, 4 colors for each bar:
