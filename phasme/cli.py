@@ -1,5 +1,7 @@
 
 import os
+import re
+import ast
 import argparse
 
 
@@ -24,6 +26,20 @@ def writable_file(filepath:str) -> str:
         return filepath
     except (PermissionError, IOError):
         raise argparse.ArgumentTypeError("file {} is not writable.".format(filepath))
+
+
+class ParametersAction(argparse.Action):
+    """Handle list of parameters, put them into a dict."""
+    def __call__(self, parser, namespace, values, option_string=None):
+        if not isinstance(values, str):
+            values = ' '.join(map(str, values))
+        param_regex = re.compile(r'([a-zA-Z0-9_-]+)=([a-zA-Z0-9_.-]+)')
+        params = {
+            field: ast.literal_eval(value)
+            for field, value in param_regex.findall(values)
+        }
+        setattr(namespace, self.dest, params)
+
 
 def cli_parser(description:str) -> argparse.ArgumentParser:
     # main parser
@@ -57,6 +73,9 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
                               help="Show non implemented methods and invalid properties.")
     parser_infos.add_argument('--graphics', '-g', action='store_true',
                               help="Produce and save various graphics and visualizations.")
+    parser_infos.add_argument('--graphics-params', '-gp', nargs='+',
+                              metavar='PARAMS', action=ParametersAction,
+                              help="Parameters for graphics routines.")
     parser_infos.add_argument('--outdir', '-o', type=str, default='.',
                               help="Where to put produced files, if any.")
     parser_infos.add_argument('--round-float', '-r', type=int, default=None,
