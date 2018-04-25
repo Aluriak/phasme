@@ -15,8 +15,10 @@ def make_all(graph, outdir:str, params:dict=None):
     Make all the graphs, yield the outfiles name and their description.
     params = {arg: value}
     """
+    if params is None:
+        params = {}
     get_description = lambda f: f.__doc__.splitlines(False)[0]
-    get_args = lambda f: inspect.getfullargspec(f)[0]
+    get_args = lambda f: inspect.getfullargspec(f).args
 
     # list containing the graphics functions
     func_list = [v for k, v in globals().items() if k.startswith("make_graphics")]
@@ -24,13 +26,23 @@ def make_all(graph, outdir:str, params:dict=None):
     for func in func_list:
         func_params = get_args(func)
         outfile = func(graph, outdir, **{p: v for p, v in params.items() if p in func_params})
-        yield outfile, get_description(func)
+        # TODO change print to yield
+        print(outfile, get_description(func))
 
     ...  # more functions to call
 
 
-def make_graphics_degree(graph, outdir:str, bins:int=50, no_one:bool=False,
-                         log:bool=False, degree_color:str='green'):
+def choose_name(outdir, file_name:str):
+    i = 1
+    file_path = f"{outdir}/{file_name}.png"
+    while os.path.exists(file_path):
+        file_path = f"{outdir}/{file_name}_{i}.png"
+        i += 1
+    return file_path
+
+
+def make_graphics_degree(graph, outdir:str, bins:int=50, no_one:bool=False, logxscale:bool=False,
+                         logyscale:bool=False, degree_color:str='green'):
     """degree distribution histogram"""
     degrees = list(graph.degree().values())
 
@@ -45,31 +57,36 @@ def make_graphics_degree(graph, outdir:str, bins:int=50, no_one:bool=False,
     x = data_list
     plt.hist(x, num_bins, edgecolor='black', facecolor=degree_color, alpha=0.8)
 
+    xlabel = "Degree"
+    ylabel = "Count"
+
     # log scale
-    if log:
-        plt.yscale('log')
+    if logxscale or logyscale:
         title += " - log scale"
-    plt.xlabel("Degree")
-    plt.ylabel("Count")
+        if logxscale:
+            plt.xscale('log')
+            xlabel += " (log)"
+        if logyscale:
+            plt.yscale('log')
+            ylabel += " (log)"
+
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.title(title)
     plt.grid(True)
 
     # choose file name
-    i = 1
-    file_name = "{}/degree_distrib.png".format(outdir)
-    while os.path.exists(file_name):
-        file_name = "{}/degree_distrib_{}.png".format(outdir, i)
-        i += 1
+    outfile_path = choose_name(outdir, "degree_distrib")
 
-    plt.savefig(file_name)
+    plt.savefig(outfile_path)
     # clear the current figure
     plt.clf()
-    file_name = os.path.basename(file_name)
+    file_name = os.path.basename(outfile_path)
     return file_name
 
 
 def make_graphics_coef(graph, outdir:str, bins:int=50, no_zero:bool=False,
-                       log:bool=False, coef_color:str='blue'):
+                       logxscale:bool=False, logyscale:bool=False, coef_color:str='blue'):
     """clustering coefficient distribution histogram"""
     coefs = list(nx.clustering(graph).values())
 
@@ -84,31 +101,36 @@ def make_graphics_coef(graph, outdir:str, bins:int=50, no_zero:bool=False,
     x = data_list
     plt.hist(x, num_bins, edgecolor='black', facecolor=coef_color, alpha=0.8)
 
+    xlabel = "Coef"
+    ylabel = "Count"
+
     # log scale
-    if log:
-        plt.yscale('log')
+    if logxscale or logyscale:
         title += " - log scale"
-    plt.xlabel("Coef")
-    plt.ylabel("Count")
+        if logxscale:
+            plt.xscale('log')
+            xlabel += " (log)"
+        if logyscale:
+            plt.yscale('log')
+            ylabel += " (log)"
+
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.title(title)
     plt.grid(True)
 
     # choose file name
-    i = 1
-    file_name = "{}/coef_distrib.png".format(outdir)
-    while os.path.exists(file_name):
-        file_name = "{}/coef_distrib_{}.png".format(outdir, i)
-        i += 1
+    outfile_path = choose_name(outdir, "coef_distrib")
 
-    plt.savefig(file_name)
+    plt.savefig(outfile_path)
     # clear the current figure
     plt.clf()
-    file_name = os.path.basename(file_name)
+    file_name = os.path.basename(outfile_path)
     return file_name
 
 
 def make_graphics_coef_stacked(graph, outdir:str, bins:int=50, no_zero:bool=False,
-                               log:bool=False, stacked_limits:list=None,
+                               logxscale:bool=False, logyscale:bool=False, stacked_limits:list=None,
                                stacked_colors:list=None):
     """clustering coefficient distribution histogram with different degree categories
     Create a distribution histogram of the local clustering coefficients.
@@ -173,27 +195,35 @@ def make_graphics_coef_stacked(graph, outdir:str, bins:int=50, no_zero:bool=Fals
     xmax = plt.gca().get_xbound()[1]
     plt.axis([0, xmax, 0, ymax])
 
-    # log scale
-    if log:
-        plt.yscale('log')
-        title += " - log scale"
+    xlabel = "Coef"
+    ylabel = "Count"
 
-    # axis labels and title
-    plt.xlabel("Coef")
-    plt.ylabel("Count")
+    # log scale
+    if logxscale or logyscale:
+        title += " - log scale"
+        if logxscale:
+            plt.xscale('log')
+            xlabel += " (log)"
+        if logyscale:
+            plt.yscale('log')
+            ylabel += " (log)"
+
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.title(title)
     plt.legend(prop={'size': 10})
     plt.grid(True)
 
     # choose file name
-    i = 1
-    file_name = "{}/coef_distrib_stacked.png".format(outdir)
-    while os.path.exists(file_name):
-        file_name = "{}/coef_distrib_stacked_{}.png".format(outdir, i)
-        i += 1
+    outfile_path = choose_name(outdir, "coef_distrib_stacked")
 
-    plt.savefig(file_name)
+    plt.savefig(outfile_path)
     # clear the current figure
     plt.clf()
-    file_name = os.path.basename(file_name)
+    file_name = os.path.basename(outfile_path)
     return file_name
+
+g = nx.balanced_tree(3, 3)
+outdir = "/run/media/linnguye/LINHCHI_16/phasme_test"
+d = {'logyscale': True}
+make_all(g, outdir, params=d)
