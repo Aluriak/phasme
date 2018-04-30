@@ -41,14 +41,15 @@ def choose_name(outdir, file_name:str):
 def make_graphics_degree(graph, outdir:str, bins:int=50, no_one:bool=False, logxscale:bool=False,
                          logyscale:bool=False, degree_color:str='green'):
     """degree distribution histogram"""
-    degrees = list(graph.degree().values())
+    degrees = [deg for _, deg in graph.degree()]
 
     title = "Degree distribution"
-    data_list = degrees[:]
     # remove the values equal to 1
     if no_one:
-        data_list = [x for x in data_list if x != 1]
+        data_list = [x for x in degrees if x != 1]
         title += " - without degree = 1"
+    else:
+        data_list = list(degrees)
     # number of bars
     num_bins = bins
     x = data_list
@@ -156,12 +157,12 @@ def make_graphics_coef_stacked(graph, outdir:str, bins:int=50, no_zero:bool=Fals
         # retrieve the nodes for each degree category
         # first value
         if i == 0:
-            node_degree = {k: v for (k, v) in degrees.items() if v <= stacked_limits[i]}
+            node_degree = {k: v for (k, v) in degrees if v <= stacked_limits[i]}
         # last value
         elif i == len(stacked_limits):
-            node_degree = {k: v for (k, v) in degrees.items() if v > stacked_limits[i - 1]}
+            node_degree = {k: v for (k, v) in degrees if v > stacked_limits[i - 1]}
         else:
-            node_degree = {k: v for (k, v) in degrees.items() if stacked_limits[i - 1] <= v <=
+            node_degree = {k: v for (k, v) in degrees if stacked_limits[i - 1] <= v <=
                            stacked_limits[i]}
         # retrieve the coef for the selected nodes
         node_coef = {k: v for (k, v) in coefs.items() if k in node_degree}

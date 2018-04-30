@@ -33,7 +33,7 @@ class ParametersAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         if not isinstance(values, str):
             values = ' '.join(map(str, values))
-        param_regex = re.compile(r'([a-zA-Z0-9_-]+)=([a-zA-Z0-9_.-]+)')
+        param_regex = re.compile(r'([a-zA-Z0-9_-]+)=([a-zA-Z0-9_.\[\]\(\)\{\},:-]+)')
         params = {
             field: ast.literal_eval(value)
             for field, value in param_regex.findall(values)
