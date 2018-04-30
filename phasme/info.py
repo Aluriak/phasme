@@ -12,7 +12,7 @@ from phasme import graphics as graphics_module
 
 
 def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
-               graphics:bool=False, outdir:str='.',
+               graphics:bool=False, graphics_params:dict={}, outdir:str='.',
                special_nodes:bool=False,
                heavy_computations:bool=False, graph_properties:bool=False,
                negative_results:bool=True,
@@ -58,7 +58,7 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
             yield 'density/cc', tuple(density(len(nodes), len(tuple(cc.edges))) for cc, nodes in zip(ccs, ccs_nodes))
 
     if graphics:
-        nb_graphics = sum(1 for _ in graphics_module.make_all(graph, outdir))
+        nb_graphics = sum(1 for _ in graphics_module.make_all(graph, outdir, graphics_params))
         yield '#graphics', nb_graphics
 
     if heavy_computations:
@@ -96,13 +96,13 @@ def yield_info(fname:str, info_motifs:int=0, info_ccs:bool=True,
 
 
 def info(fname:str, info_motifs:int=0, info_ccs:bool=True,
-         graphics:bool=False, outdir:str='.',
+         graphics:bool=False, graphics_params:dict={}, outdir:str='.',
          special_nodes:bool=False, heavy_computations:bool=False,
          graph_properties:bool=False,
          round_float:int=None,
          negative_results:bool=True, edge_predicate:str=edge_predicate) -> dict:
     """Yield lines of text describing given graph info."""
-    infos = OrderedDict(yield_info(fname, info_motifs, info_ccs, graphics, outdir, special_nodes, heavy_computations, graph_properties, negative_results, edge_predicate))
+    infos = OrderedDict(yield_info(fname, info_motifs, info_ccs, graphics, graphics_params, outdir, special_nodes, heavy_computations, graph_properties, negative_results, edge_predicate))
     properties = {True: set(), False: set()}
     maxkeylen = max(map(len, infos))
     iter_handler = lambda v: ', '.join(sorted(map(str, v)))
