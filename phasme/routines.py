@@ -5,6 +5,7 @@
 import os
 import random
 import networkx
+import itertools
 from phasme import commons
 from phasme.asp import asp_from_graph
 from phasme.info import info
@@ -76,3 +77,21 @@ def generate(target:str, method:str, method_parameters=[],
     """
     graph = graph_from_networkx_method(method, method_parameters)
     return graph_to_file(graph, target, edge_predicate=edge_predicate)
+
+
+def extract_by_node(fname:str, target:str=None, nodes:iter=(), order:int=1,
+                    edge_predicate:str=edge_predicate):
+    """Write in file of given name a subgraph of input one.
+
+    """
+    fname = commons.normalize_filename(fname)
+    if target: target = commons.normalize_filename(target)
+    if not target:  target = fname
+    graph = graph_from_file(fname, edge_predicate=edge_predicate)
+    nodes = set(nodes)
+    all_neighbors = networkx.classes.function.all_neighbors
+    for _ in range(order):
+        nodes |= set(itertools.chain.from_iterable(
+            all_neighbors(graph, node) for node in nodes
+        ))
+    return graph_to_file(graph.subgraph(nodes), target, edge_predicate=edge_predicate)

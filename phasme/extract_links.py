@@ -68,3 +68,13 @@ def links_from_dirty_lines(lines:str, edge_predicate:str=edge_predicate):
         for args in model.get(edge_predicate, ()):
             if len(args) == 2:
                 yield args
+
+
+def read_lines_from_files(fnames:[str]) -> [str]:
+    """Yield non-empty lines found in given filename(s)"""
+    if isinstance(fnames, str):
+        fnames = [fnames]
+    for fname in fnames:
+        with open(fname) as fd:
+            for line in map(str.strip, fd):
+                if line: yield line

@@ -35,11 +35,13 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     parser_split = subs.add_parser('split', description='Split graph by cc.')
     parser_convr = subs.add_parser('convert', description='Convert, rewrite or anonymize graph to standard format or clean ASP.')
     parser_genrt = subs.add_parser('generate', description='Generate an ASP graph file.')
+    parser_extra = subs.add_parser('extract', description='Extract subgraphs.')
 
     give_common_args(parser_infos)
     give_common_args(parser_split)
     give_common_args(parser_convr)
     give_common_args(parser_genrt, infile_is_outfile=True)
+    give_common_args(parser_extra)
 
 
     # infos on graph
@@ -86,6 +88,25 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     parser_genrt.add_argument('method', type=str, help='Generation method.')
     parser_genrt.add_argument('args', type=str, nargs='+', metavar='F=V',
                               default=None, help='Args to give to the generation method.')
+
+    # extract subgraphs from given graph
+    parser_extra.add_argument('target', type=str, default=None,
+                              help='file to write the subgraph in.')
+    parser_extra_subs = parser_extra.add_subparsers(title='extraction method', dest='extraction')
+    # extract by giving a list of nodes
+    parser_extra_bynode = parser_extra_subs.add_parser(
+        'nodes', description="Extract given nodes, and their neighbors."
+    )
+    parser_extra_bynode.add_argument('nodes', type=str, nargs='+', metavar='NODE',
+                                     default=(), help="Nodes to extract.")
+    parser_extra_bynode.add_argument('neighbors', type=int, default=1,
+                                     help="Extract also neighbors of target of n-th order.")
+    parser_extra_bynode.add_argument('--nodes-in-file', '-f', action='store_true',
+                                     help="Nodes argument is a file containing the nodes to extract.")
+
+    # parser_extra_motifs = parser_extra_subs.add_parser(
+        # 'motif', description="Extract maximal motifs."
+    # )
 
     return parser
 

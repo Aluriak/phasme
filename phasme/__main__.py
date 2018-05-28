@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from phasme import cli
-from phasme import routines
+from phasme import routines, extract_links
 
 
 def run_cli():
@@ -37,6 +37,14 @@ def run_cli():
         routines.generate(target=args.outfile, method=args.method,
                           method_parameters=args.args,
                           edge_predicate=args.edge_predicate)
+    elif args.command == 'extract':
+        nodes = args.nodes
+        if args.nodes_in_file:
+            nodes = set(extract_links.read_lines_from_files(nodes))
+        routines.extract_by_node(
+            args.infile, args.target, nodes=nodes, order=args.neighbors,
+            edge_predicate=args.edge_predicate
+        )
     else:
         print('WOOT', args)
 

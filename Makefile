@@ -9,6 +9,8 @@ g:
 	python -m phasme generate out/todel powerlaw_cluster_graph n=5 m=2 p=0.01
 tex:
 	python -m phasme convert data/realgraph.lp todel.tex
+e:
+	python -m phasme extract data/realgraph.lp todel.lp nodes a b 2
 
 
 t: test

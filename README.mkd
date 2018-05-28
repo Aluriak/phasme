@@ -65,6 +65,7 @@ CLI provides access to higher level [routines](phasme/routines.py).
 ## Changelog
 
 - 0.0.12
+    - new subcommand: *extract*, to extract subgraphs based on their nodes
     - convert: new output format: latex/tikz
     - infos: give infos on articulation points
     - infos: indicate number of self loops, if any, or give property 'no loop'
