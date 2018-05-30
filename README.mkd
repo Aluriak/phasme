@@ -67,6 +67,9 @@ CLI provides access to higher level [routines](phasme/routines.py).
 
 ## Changelog
 
+- 0.0.14
+- 0.0.13
+    - randomize: `--per-cc` option to run it on each connected component independantly
 - 0.0.12
     - new subcommand: *randomize*, to build a random graph based on another
     - new subcommand: *extract*, to extract subgraphs based on their nodes

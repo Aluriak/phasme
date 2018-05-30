@@ -97,7 +97,7 @@ def extract_by_node(fname:str, target:str=None, nodes:iter=(), order:int=1,
     return graph_to_file(graph.subgraph(nodes), target, edge_predicate=edge_predicate)
 
 
-def randomize(fname:str, target:str, iterations:int,
+def randomize(fname:str, target:str, iterations:int, per_cc:bool=False,
               edge_predicate:str=edge_predicate):
     """Write in file of given name a randomized version of input graph.
 
@@ -105,6 +105,28 @@ def randomize(fname:str, target:str, iterations:int,
     fname = commons.normalize_filename(fname)
     target = commons.normalize_filename(target)
     graph = graph_from_file(fname, edge_predicate=edge_predicate)
-    iterations *= graph.number_of_edges()
-    graph = networkx.algorithms.double_edge_swap(graph, nswap=iterations, max_tries=100*iterations)
+    if per_cc:
+        graphs = (
+            graph.subgraph(nodes).copy()
+            for nodes in networkx.connected_components(graph)
+        )
+    else:
+        graphs = [graph]
+    def run():
+        for graph in graphs:
+            print(tuple(graph.edges))
+            nb_edge = graph.number_of_edges()
+            total_iterations = iterations * graph.number_of_edges()
+            try:
+                yield networkx.algorithms.double_edge_swap(graph, nswap=total_iterations, max_tries=100*total_iterations)
+            except networkx.exception.NetworkXError as err:
+                print(err.args[0])
+                yield graph
+            except networkx.exception.NetworkXAlgorithmError:
+                print("Maximum number of swap attempts reached, or graph can't be swapped. Ignored.")
+                yield graph
+    if per_cc:
+        graph = networkx.compose_all(run())
+    else:
+        graph = next(run())
     return graph_to_file(graph, target, edge_predicate=edge_predicate)

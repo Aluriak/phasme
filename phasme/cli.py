@@ -115,6 +115,8 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
                               help='file to write the generated graph in.')
     parser_randm.add_argument('--iterations', '-i', default=100, type=int,
                               help="Number of iterations divided by number of edges (Q in Milo et al.).")
+    parser_randm.add_argument('--per-cc', '-c', action='store_true',
+                              help="Run the randomization independantly for each connected component.")
     return parser
 
 
