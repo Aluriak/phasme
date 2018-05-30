@@ -36,12 +36,14 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
     parser_convr = subs.add_parser('convert', description='Convert, rewrite or anonymize graph to standard format or clean ASP.')
     parser_genrt = subs.add_parser('generate', description='Generate an ASP graph file.')
     parser_extra = subs.add_parser('extract', description='Extract subgraphs.')
+    parser_randm = subs.add_parser('randomize', description='Build a randomization.')
 
     give_common_args(parser_infos)
     give_common_args(parser_split)
     give_common_args(parser_convr)
     give_common_args(parser_genrt, infile_is_outfile=True)
     give_common_args(parser_extra)
+    give_common_args(parser_randm)
 
 
     # infos on graph
@@ -108,6 +110,11 @@ def cli_parser(description:str) -> argparse.ArgumentParser:
         # 'motif', description="Extract maximal motifs."
     # )
 
+    # build a randomized graph.
+    parser_randm.add_argument('target', type=str,
+                              help='file to write the generated graph in.')
+    parser_randm.add_argument('--iterations', '-i', default=100, type=int,
+                              help="Number of iterations divided by number of edges (Q in Milo et al.).")
     return parser
 
 

@@ -95,3 +95,16 @@ def extract_by_node(fname:str, target:str=None, nodes:iter=(), order:int=1,
             all_neighbors(graph, node) for node in nodes
         ))
     return graph_to_file(graph.subgraph(nodes), target, edge_predicate=edge_predicate)
+
+
+def randomize(fname:str, target:str, iterations:int,
+              edge_predicate:str=edge_predicate):
+    """Write in file of given name a randomized version of input graph.
+
+    """
+    fname = commons.normalize_filename(fname)
+    target = commons.normalize_filename(target)
+    graph = graph_from_file(fname, edge_predicate=edge_predicate)
+    iterations *= graph.number_of_edges()
+    graph = networkx.algorithms.double_edge_swap(graph, nswap=iterations, max_tries=100*iterations)
+    return graph_to_file(graph, target, edge_predicate=edge_predicate)

@@ -45,6 +45,9 @@ def run_cli():
             args.infile, args.target, nodes=nodes, order=args.neighbors,
             edge_predicate=args.edge_predicate
         )
+    elif args.command == 'randomize':
+        routines.randomize(args.infile, args.target, args.iterations,
+                           edge_predicate=args.edge_predicate)
     else:
         print('WOOT', args)
 

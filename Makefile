@@ -11,6 +11,8 @@ tex:
 	python -m phasme convert data/realgraph.lp todel.tex
 e:
 	python -m phasme extract data/realgraph.lp todel.lp nodes a b 2
+r:
+	python -m phasme randomize data/realgraph.lp todel.lp -i 200
 
 
 t: test

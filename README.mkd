@@ -61,10 +61,14 @@ CLI provides access to higher level [routines](phasme/routines.py).
     # ready-to-draw tikz visualization of ASP graph
     python -m phasme convert data.lp graph-in-latex-tikz.tex
 
+    # randomize a graph, keeping the same degree distribution, using switching method
+    python -m phasme randomize data.lp randomized-graph.gml
+
 
 ## Changelog
 
 - 0.0.12
+    - new subcommand: *randomize*, to build a random graph based on another
     - new subcommand: *extract*, to extract subgraphs based on their nodes
     - convert: new output format: latex/tikz
     - infos: give infos on articulation points
