@@ -1,3 +1,0 @@
-clyngor==0.3.1
-networkx==2.1
-pydot==1.2.4
