@@ -1,2 +1,4 @@
 exclude *
 recursive-include phasme
+prune data
+prune test
