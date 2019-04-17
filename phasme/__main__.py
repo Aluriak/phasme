@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from phasme import cli
-from phasme import routines, extract_links
+from . import cli
+from . import routines, extract_links
 
 
 def run_cli():
