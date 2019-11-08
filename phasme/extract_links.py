@@ -31,13 +31,15 @@ def links_from_lines(lines:iter, edge_predicate:str=edge_predicate):
     """Yield lines read from ASP file. If any error is found,
     the dirty method is used for the remaining lines.
     """
-    lines = iter(lines)
-    for line in lines:
-        try:
-            yield from links_from_clean_lines((line,))
-        except ValueError:
-            yield from links_from_dirty_lines((line,))
-            yield from links_from_dirty_lines(lines)
+    all_lines = tuple(lines)
+    lines = iter(all_lines)
+    edges = []  # accumulate edges
+    try:
+        for line in lines:
+            edges.extend(links_from_clean_lines((line,)))
+    except ValueError:  # file is not a simple ASP file
+        edges = links_from_dirty_lines(all_lines)
+    yield from edges
 
 def links_from_clean_lines(lines:str, edge_predicate:str=edge_predicate,
                            handle_comments:bool=True):
@@ -63,7 +65,8 @@ def links_from_clean_lines(lines:str, edge_predicate:str=edge_predicate,
 
 def links_from_dirty_lines(lines:str, edge_predicate:str=edge_predicate):
     """Use the bulldozer to handle these lines by calling ASP solver"""
-    models = clyngor.solve(inline=''.join(map(str,lines))).careful_parsing
+    asp = ''.join(map(str,lines))
+    models = clyngor.solve(inline=asp).careful_parsing
     for model in models.by_predicate:
         for args in model.get(edge_predicate, ()):
             if len(args) == 2:

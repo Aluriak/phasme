@@ -42,3 +42,16 @@ def test_generate_from_networkx():
     graph = comparable_graph(graph)
     assert len(graph) == 6
     assert graph == frozenset({frozenset({1, 2}), frozenset({1, 4}), frozenset({3, 4}), frozenset({2, 3}), frozenset({0, 2}), frozenset({1, 3})})
+
+
+def test_many_atoms():
+    file = 'data/many-atoms.lp'
+    one = comparable_graph(graph_from_file(file))
+    assert len(one) == 9, one
+    assert one == frozenset({
+        frozenset({'a', 'd'}), frozenset({'a', 'e'}),
+        frozenset({'b', 'd'}), frozenset({'b', 'e'}),
+        frozenset({'c', 'd'}), frozenset({'c', 'e'}),
+        frozenset({'d', 'e'}), frozenset({'d', 'f'}),
+        frozenset({'e', 'f'}),
+    })
